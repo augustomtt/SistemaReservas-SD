@@ -14,12 +14,10 @@
 
     <main>
       <div class="mt-5 row justify-content-center">
-       
-       
-              
+            
           <form  action="">
               <fieldset class="border border-secondary rounded p-3">
-                <legend class="w-auto">Datos</legend>
+                <legend class="w-auto">Datos Personales</legend>
                       <div class="pt-4 form-group">
                         <label for="name">Nombre</label>
                         <input id="name" type="text" />
@@ -31,26 +29,39 @@
                         <input id="lastname" type="text" />
                       </div>
 
-                      <div class="pt-3 form-group">
-                        <label for="sucursales">Sucursales</label>
-                        <select name="drawfs" id="sucursales">
-                          <option>Sucursal 1</option>
-                          <option>Sucursal 2</option>
-                        </select>
-                      </div>
-                      <div class="pt-3 form-group">
-                        <label for="turnos">Turnos</label>
-                        <select name="drawfs" id="turnos">
-                          <option>Turno 1</option>
-                          <option>Turno 2</option>
-                        </select>
+                      <div class="pt-4 form-group">
+                        <label for="email">Email</label>
+                        <input id="email" type="text" />
                       </div>
 
+                
                    
                  
                   
               </fieldset>
-              <button onclick="clik()" class="m-3 btn btn-primary">Confirmar</button>
+
+              <fieldset class="border border-secondary rounded p-3 mt-5">
+                <legend class="w-auto">Datos Reserva</legend>
+                <div class="pt-3 form-group">
+                  <label for="sucursales">Sucursales</label>
+                  <select name="sucursales" id="sucursales">
+                    <option >Seleccione Una Sucursal…</option>
+                    <option>Sucursal 1</option>
+                    <option>Sucursal 2</option>
+                  </select>
+                </div>
+                <div id="map"></div>
+                <div class="pt-3 form-group">
+                  <label style="display: none;" for="lista_turnos" id="label_turnos">Turnos Disponibles</label>
+                  <select style="display: none;" name="turnos" id="lista_turnos">
+                    <option >Seleccione un turno...</option>
+                    <option>Turno 1</option>
+                    <option>Turno 2</option>
+                  </select>
+                </div>
+
+              </fieldset>
+              <button  class="m-3 btn btn-primary" id="btn-confirm">Confirmar</button>
             </form>
              
         </div>
