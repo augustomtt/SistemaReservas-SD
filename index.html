@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TP Sistemas</title>
+    <link href="styles/bootstrap.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <header>
+      <h1 class="text-center">Reservas</h1>
+    </header>
+
+    <main>
+      <div class="mt-5 row justify-content-center">
+            
+          <form  action="">
+              <fieldset class="border border-secondary rounded p-3">
+                <legend class="w-auto">Datos Personales</legend>
+                      <div class="pt-4 form-group">
+                        <label for="name">Nombre</label>
+                        <input id="name" type="text" />
+                      </div>
+                        
+
+                      <div class="pt-4 form-group">
+                        <label for="lastname">Apellido</label>
+                        <input id="lastname" type="text" />
+                      </div>
+
+                      <div class="pt-4 form-group">
+                        <label for="email">Email</label>
+                        <input id="email" type="text" />
+                      </div>
+
+                
+                   
+                 
+                  
+              </fieldset>
+
+              <fieldset class="border border-secondary rounded p-3 mt-5">
+                <legend class="w-auto">Datos Reserva</legend>
+                <div class="pt-3 form-group">
+                  <label for="sucursales">Sucursales</label>
+                  <select name="sucursales" id="sucursales">
+                    <option >Seleccione Una Sucursal…</option>
+                    <option>Sucursal 1</option>
+                    <option>Sucursal 2</option>
+                  </select>
+                </div>
+                
+                <div class="pt-3 form-group">
+                  <label style="display: none;" for="lista_turnos" id="label_turnos">Turnos Disponibles</label>
+                  <select style="display: none;" name="turnos" id="lista_turnos">
+                    <option >Seleccione un turno...</option>
+                    <option>Turno 1</option>
+                    <option>Turno 2</option>
+                  </select>
+                </div>
+
+              </fieldset>
+              <button  class="m-3 btn btn-primary" id="btn-confirm">Confirmar</button>
+              <div id="map"></div>
+            </form>
+             
+        </div>
+     
+    </main>
+
+    <footer></footer>
+    <script type="text/javascript" src="js/user.js"></script> 
+   </body>
+</html>
