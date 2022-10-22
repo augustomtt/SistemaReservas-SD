@@ -42,12 +42,11 @@
 
               <fieldset class="border border-secondary rounded p-3 mt-5">
                 <legend class="w-auto">Datos Reserva</legend>
+                <div id="map"></div>
                 <div class="pt-3 form-group">
                   <label for="sucursales">Sucursales</label>
                   <select name="sucursales" id="sucursales">
                     <option >Seleccione Una Sucursal…</option>
-                    <option>Sucursal 1</option>
-                    <option>Sucursal 2</option>
                   </select>
                 </div>
                 
@@ -55,14 +54,12 @@
                   <label style="display: none;" for="lista_turnos" id="label_turnos">Turnos Disponibles</label>
                   <select style="display: none;" name="turnos" id="lista_turnos">
                     <option >Seleccione un turno...</option>
-                    <option>Turno 1</option>
-                    <option>Turno 2</option>
                   </select>
                 </div>
 
               </fieldset>
               <button  class="m-3 btn btn-primary" id="btn-confirm">Confirmar</button>
-              <div id="map"></div>
+             
             </form>
              
         </div>
