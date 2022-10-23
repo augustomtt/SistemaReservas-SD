@@ -34,11 +34,11 @@ sucursal.addEventListener('change',function(e){
     //Cargar turnos de suscursal (comunicarse con api gateway)
     console.log(sucursal.value)
     //Elimino los turnos
-    let options = listaTurno.querySelectorAll('option')
-    options.forEach(o => o.remove());
+    //let options = listaTurno.querySelectorAll('option')
+    //options.forEach(o => o.remove());
 
 
-    cargarTurnos(sucursal.value);
+    //cargarTurnos(sucursal.value);
     
     labelTurno.style.display = "inline-block"
     listaTurno.style.display = "inline-block"
@@ -71,15 +71,28 @@ cont =1;
 
 }
 (function cargarSucursales(){
-     let option  = document.createElement('option')
-     option.value = 1;
-     option.text = "Sucursal 1";
-    sucursal.appendChild(option)
-    let option1  = document.createElement('option')
-     option1.value = 2;
-     option1.text = "Sucursal 2";
-    sucursal.appendChild(option1)
-    
+  
+  const request = fetch("http://localhost:3000/sucursales",{
+    method: "GET",
+    headers: {//'Accept': 'application/json',
+   // 'Access-Control-Allow-Origin': '*'
+            	
+  }
+  }
+
+).then(res =>res.json())
+.then(data => {
+  console.log("JSON");
+data.forEach(element => {
+  let option  = document.createElement('option')
+  option.value = element.id;
+  option.text = element.name;
+ sucursal.appendChild(option)
+  });
+}
+)
+.catch(error => console.error(error));
+
 })();
 
 
