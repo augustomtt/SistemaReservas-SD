@@ -5,21 +5,35 @@ const server = http.createServer((req,res)=>{
 
 const{ url,method} = req;
 
-//Logger
 console.log(`URL: ${url} - METHOD: ${method}`);
-
-res.writeHead(200,{'Content-Type': 'text/plain'});
-res.write('Received');
-res.end();
-
 
 switch(method){
     case "GET":
         if(url == "/sucursales"){
-            res.writeHead(200,{'Content/Type':'application/json'});
+            res.writeHead(200,{'Content-Type':'application/json'});
+            
+            http.get("http://localhost:8080", respuesta => {
+                let data = '';
+                respuesta.on('data', chunk => {
+                  data += chunk;
+                });
+                respuesta.on('end', () => {
+                  data = JSON.parse(data);
+                 res.write(JSON.stringify(data))
+                 res.end();
+                })
+              }).on('error', err => {
+                console.log(err.message);
+              })
+            
             
         }
-        if(url == "/reservas")
+        if(url == "/reserva"){
+            res.writeHead(200,{'Content-Type': 'text/plain'});
+            res.write('Reserva');
+            res.end()
+
+        }
         break;
 
     case "POST":

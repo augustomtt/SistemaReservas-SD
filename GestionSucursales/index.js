@@ -18,7 +18,6 @@ const server = http.createServer((req,res)=>{
            
             if(url == "/"){
                 getSucursales(res)
-               
             }
             break;    
     }
