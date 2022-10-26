@@ -6,7 +6,33 @@ function getReservas(res){
     res.write(JSON.stringify(reservas)); // envio las reservas
     res.end()
 }
-
+function getReservasUsuario(res,idUsuario){
+    
+    reservasUsuario = []
+    reservas.forEach(element => {
+        if(element.userId == idUsuario){
+           reservasUsuario.push(element);
+        }        
+    });
+    
+    
+    res.writeHead(200,{'Content-Type':'application/json'}); // devuelvo json
+    res.write(JSON.stringify(reservasUsuario)); // envio las reservas
+    res.end()
+}
+function getReservasUsuarioSucursal(res,idUsuario,idSucursal){
+    reservasUsuarioSucursal = []
+    reservas.forEach(element => {
+        if(element.userId == idUsuario && element.branchId==idSucursal){
+           reservasUsuarioSucursal.push(element);
+        }        
+    });
+    
+    
+    res.writeHead(200,{'Content-Type':'application/json'}); // devuelvo json
+    res.write(JSON.stringify(reservasUsuarioSucursal)); // envio las reservas
+    res.end()
+}
 function altaReserva(dateTime,email,branchid){
     //agrego reserva al JSON
     resultado = 1;//o 0
@@ -54,11 +80,19 @@ const server = http.createServer((req,res)=>{
     
     //Logger
     console.log(`URL: ${url} - METHOD: ${method}`);
+    let parametros = url.split(":");
     
     switch(method){
-        case "GET"://turnos sucursal y turnos usuario
-            if(url == "/"){
+        case "GET":
+            
+            if(parametros.length == 1){ // todas las reservas
                 getReservas(res)
+            }
+            if(parametros.length ==2 ){ // todas las reservas de un usuario
+                getReservasUsuario(res,parametros[1])
+            }
+            if(parametros.length ==3){ // todas las reservas de un usuario de una sucursal
+                getReservasUsuarioSucursal(res,parametros[1],parametros[2])
             }
             break;
         case "PUT": //alta y modificacion
@@ -73,6 +107,6 @@ const server = http.createServer((req,res)=>{
     }
     })
     
-    //puerto = ;
-    //server.listen(puerto);
-    //console.log('Gestion Reservas',puerto);
+    puerto = 8000;
+    server.listen(puerto);
+    console.log('Gestion Reservas',puerto);
