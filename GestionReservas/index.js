@@ -22,47 +22,69 @@ function bodyParser(request) {
 }
   
 function getTurnos(res,queryParams){
-    res.writeHead(200,{'Content-Type':'application/json'}); 
-    res.write(JSON.stringify(reservas)); 
+   let turnos = [];
+   
+    // Falta la parte de filtar por los query params
+    reservas.forEach(r => {
+        let userId = (queryParams.userId!=undefined)?queryParams.userId:r.userId;
+        let branchId = (queryParams.branchId!=undefined)?queryParams.branchId:r.branchId;
+        let dateTime = (queryParams.datetime!=undefined)?queryParams.datetime:r.datetime;
+
+        if(r.userId == userId && r.branchId == branchId && r.datetime == dateTime)
+            turnos.push(r);        
+    });
+    
+    if(turnos.length>0){
+        res.writeHead(200,{'Content-Type':'application/json'}); 
+        res.write(JSON.stringify(turnos)); 
+    }
+    else{
+        res.writeHead(404,{'Content-Type':'application/json'}); 
+        let respuesta = {
+            messageError : "No se encuentra ningun turno"
+        }
+        res.write(JSON.stringify(respuesta)); 
+    }
+   
     res.end()
 }
 function getReserva(res,idReserva){
     
   let reserva = reservas.find(r => r.id == idReserva);
+  let respuesta = {
+    messageError: ""
+}
   if(reserva!=undefined){
     res.writeHead(200,{'Content-Type':'application/json'});
     res.write(JSON.stringify(reserva)); 
   }else{
     //Devuelvo error
     res.writeHead(404,{'Content-Type':'application/json'});
-    respuesta = {
-
-    }
+   respuesta.messageError = "No se encuentra ninguna reserva con ese id";
     res.write(JSON.stringify(respuesta)); 
   }
   res.end();   
 }
-/*
-function getReservasUsuarioSucursal(res,idUsuario,idSucursal){
-    reservasUsuarioSucursal = []
-    reservas.forEach(element => {
-        if(element.userId == idUsuario && element.branchId==idSucursal){
-           reservasUsuarioSucursal.push(element);
-        }        
-    });
-    
-    
-    res.writeHead(200,{'Content-Type':'application/json'}); // devuelvo json
-    res.write(JSON.stringify(reservasUsuarioSucursal)); // envio las reservas
-    res.end()
-}*/
 
-
-function bajaReserva(idReserva){
-    //eliminar reserva del JSON
-    resultado = 1;//o 0
-    res.writeHead(200,{'Content-Type':'application/json'});
-    res.write(resultado);
+function bajaReserva(res,idReserva){
+    
+    let reserva = reservas.find(r => r.id == idReserva);
+    let respuesta = {
+        messageError: ""
+    }
+    if(reserva!=undefined){
+        reserva.email  = null;
+        reserva.userId = null;
+        res.writeHead(200,{'Content-Type':'application/json'});
+        respuesta.messageError = "Turno eliminado correctamente"
+        fs.writeFile('reservas.json', JSON.stringify(reservas),'utf8', (err) => { 
+            if (err) throw err; 
+        }); 
+    }else{
+        res.writeHead(404,{'Content-Type':'application/json'});
+        respuesta.messageError = "No se encuentra ninguna reserva con ese id"   
+    }
+    res.write(JSON.stringify(respuesta));
     res.end()
 }
 
@@ -79,13 +101,11 @@ function altaReserva(req,res,idReserva){
                         resultado = 1;
                     }   
                 });
-                
                 if(resultado){
                     res.writeHead(200,{'Content-Type':'application/json'});
                     //Guardo el archivo nuevamente
                     fs.writeFile('reservas.json', JSON.stringify(reservas),'utf8', (err) => { 
                         if (err) throw err; 
-                        
                     }); 
                 }
                    
@@ -93,11 +113,8 @@ function altaReserva(req,res,idReserva){
                     res.writeHead(400,{'Content-Type':'application/json'});
                 res.write(JSON.stringify(resultado)); 
                 res.end()
-            
-            
             })
             .catch(error => console.error(error));   
-   
 }
 
 
@@ -114,14 +131,12 @@ const server = http.createServer((req,res)=>{
   
     const{url,method} = req;
     const queryParams = path.parse(req.url, true).query;
-
     console.log(`URL: ${url} - METHOD: ${method}`);
-    console.log(queryParams);
+
  
     if(url.startsWith("/api/reserva")){
         let parametros = url.split("/");
         parametros = parametros.filter(el => el != '')   //filtro los vacios
-        console.log(parametros)
         switch(method){
             case "GET":
                 if(parametros.length == 2 || (parametros.length>2 && parametros[2].startsWith("?"))){ 
@@ -137,7 +152,7 @@ const server = http.createServer((req,res)=>{
                 altaReserva(req,res,parametros[2]);
                 break;
             case "DELETE":
-                //bajaReserva(req,res,parametros[2])
+                bajaReserva(res,parametros[2])
                 break;    
         }
     }
