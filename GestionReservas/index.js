@@ -1,5 +1,8 @@
 const http = require('http');
+const fs = require('fs'); 
 var reservas =  require('./reservas.json');
+
+
 
 function bodyParser(request) {
     return new Promise((resolve, reject) => {
@@ -68,6 +71,8 @@ function bajaReserva(idReserva){
 }
 
 function modificaReserva(req,res,idReserva){
+
+    let resultado = 0;
     bodyParser(req)
             .then(()=>{
                
@@ -75,15 +80,22 @@ function modificaReserva(req,res,idReserva){
                     if(element.id == idReserva){
                         element.email = req.body.email;
                         element.userId = req.body.userId; 
-                        
-                    }
-                    
-                    
-                    
+                        resultado = 1;
+                    }   
                 });
                 
-                res.writeHead(200,{'Content-Type':'application/json'}); // devuelvo json
-                res.write(JSON.stringify(reservas)); // envio las reservas
+                if(resultado){
+                    res.writeHead(200,{'Content-Type':'application/json'});
+                    //Guardo el archivo nuevamente
+                    fs.writeFile('reservas.json', JSON.stringify(reservas),'utf8', (err) => { 
+                        if (err) throw err; 
+                        
+                    }); 
+                }
+                   
+                else
+                    res.writeHead(400,{'Content-Type':'application/json'});
+                res.write(JSON.stringify(resultado)); 
                 res.end()
             
             
