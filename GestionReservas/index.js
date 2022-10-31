@@ -28,9 +28,12 @@ function getTurnos(res,queryParams){
     reservas.forEach(r => {
         let userId = (queryParams.userId!=undefined)?queryParams.userId:r.userId;
         let branchId = (queryParams.branchId!=undefined)?queryParams.branchId:r.branchId;
-        let dateTime = (queryParams.datetime!=undefined)?queryParams.datetime:r.datetime;
-
-        if(r.userId == userId && r.branchId == branchId && r.datetime == dateTime)
+        let dateTime = (queryParams.datetime!=undefined)?queryParams.datetime:new Date(r.datetime).toLocaleDateString();
+        
+        let dia = new Date(r.datetime).toLocaleDateString();
+        console.log(dia);
+        
+        if(r.userId == userId && r.branchId == branchId &&  dia == dateTime)
             turnos.push(r);        
     });
     
@@ -73,8 +76,8 @@ function bajaReserva(res,idReserva){
         messageError: ""
     }
     if(reserva!=undefined){
-        reserva.email  = null;
-        reserva.userId = null;
+        reserva.email  = "";
+        reserva.userId = "";
         res.writeHead(200,{'Content-Type':'application/json'});
         respuesta.messageError = "Turno eliminado correctamente"
         fs.writeFile('reservas.json', JSON.stringify(reservas),'utf8', (err) => { 
