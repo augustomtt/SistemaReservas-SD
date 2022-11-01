@@ -31,7 +31,7 @@ function getTurnos(res,queryParams){
         let dateTime = (queryParams.datetime!=undefined)?queryParams.datetime:new Date(r.datetime).toLocaleDateString();
         
         let dia = new Date(r.datetime).toLocaleDateString();
-        console.log(dia);
+     
         
         if(r.userId == userId && r.branchId == branchId &&  dia == dateTime)
             turnos.push(r);        
@@ -137,7 +137,7 @@ const server = http.createServer((req,res)=>{
     console.log(`URL: ${url} - METHOD: ${method}`);
 
  
-    if(url.startsWith("/api/reserva")){
+    if(url.startsWith("/api/reservas/")){
         let parametros = url.split("/");
         parametros = parametros.filter(el => el != '')   //filtro los vacios
         switch(method){
