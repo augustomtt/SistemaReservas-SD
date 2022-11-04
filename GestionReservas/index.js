@@ -28,12 +28,10 @@ function getTurnos(res, queryParams) {
   reservas.forEach(r => {
     let userId = (queryParams.userId != undefined) ? queryParams.userId : r.userId;
     let branchId = (queryParams.branchId != undefined) ? queryParams.branchId : r.branchId;
-    let dateTime = (queryParams.datetime != undefined) ? queryParams.datetime : new Date(r.datetime).toLocaleDateString();
-
-    let dia = new Date(r.datetime).toLocaleDateString();
-
-
-    if (r.userId == userId && r.branchId == branchId && dia == dateTime)
+    let fecha = r.datetime.split("T");
+    let dateTime = (queryParams.datetime != undefined) ? queryParams.datetime: fecha[0];
+    
+    if (r.userId == userId && r.branchId == branchId && fecha[0] == dateTime)
       turnos.push(r);
   });
 
@@ -44,7 +42,7 @@ function getTurnos(res, queryParams) {
   else {
     res.writeHead(404, { 'Content-Type': 'application/json' });
     let respuesta = {
-      messageError: "No se encuentra ningun turno"
+      msg: "No se encuentra ningun turno"
     }
     res.write(JSON.stringify(respuesta));
   }
@@ -55,7 +53,7 @@ function getReserva(res, idReserva) {
 
   let reserva = reservas.find(r => r.id == idReserva);
   let respuesta = {
-    messageError: ""
+    msg: ""
   }
   if (reserva != undefined) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -63,7 +61,7 @@ function getReserva(res, idReserva) {
   } else {
     //Devuelvo error
     res.writeHead(404, { 'Content-Type': 'application/json' });
-    respuesta.messageError = "No se encuentra ninguna reserva con ese id";
+    respuesta.msg = "No se encuentra ninguna reserva con ese id";
     res.write(JSON.stringify(respuesta));
   }
   res.end();
@@ -73,19 +71,19 @@ function bajaReserva(res, idReserva) {
 
   let reserva = reservas.find(r => r.id == idReserva);
   let respuesta = {
-    messageError: ""
+    msg: ""
   }
   if (reserva != undefined) {
-    reserva.email = "";
-    reserva.userId = "";
+    reserva.email = null;
+    reserva.userId = -1;
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    respuesta.messageError = "Turno eliminado correctamente"
+    respuesta.msg = "Turno eliminado correctamente"
     fs.writeFile('reservas.json', JSON.stringify(reservas), 'utf8', (err) => {
       if (err) throw err;
     });
   } else {
     res.writeHead(404, { 'Content-Type': 'application/json' });
-    respuesta.messageError = "No se encuentra ninguna reserva con ese id"
+    respuesta.msg = "No se encuentra ninguna reserva con ese id"
   }
   res.write(JSON.stringify(respuesta));
   res.end()
@@ -122,14 +120,12 @@ function altaReserva(req, res, idReserva) {
 
 
 function verificaTurno() {
-
+// cambiar el status del turno
 }
-
-
 const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Request-Method', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET,PUT,DELETE,PATCH');
+  res.setHeader('Access-Control-Allow-Methods', '*');
   res.setHeader('Access-Control-Allow-Headers', '*');
 
   const { url, method } = req;
@@ -137,22 +133,27 @@ const server = http.createServer((req, res) => {
   console.log(`URL: ${url} - METHOD: ${method}`);
 
 
-  if (url.startsWith("/api/reservas/")) {
+  if (url.startsWith("/api/reservas")) {
     let parametros = url.split("/");
     parametros = parametros.filter(el => el != '')   //filtro los vacios
+    console.log(parametros);
     switch (method) {
+      //&& parametros[1].includes("reservas?")
       case "GET":
-        if (parametros.length == 2 || (parametros.length > 2 && parametros[2].startsWith("?"))) {
+        if((parametros.length ==2 && parametros[1] == "reservas") || ( parametros.length >= 2 &&  parametros[1].startsWith("reservas?"))) {
 
           getTurnos(res, queryParams)   // turnos (chequear query params para filtar)
         }
-        if (parametros.length == 3 && !parametros[2].startsWith("?")) { // reserva vinculada a ese idReserva
+        if (parametros.length == 3 && !parametros[1].includes("reservas?")) { // reserva vinculada a ese idReserva
 
           getReserva(res, parametros[2])
         }
         break;
       case "POST":
-        altaReserva(req, res, parametros[2]);
+        if(parametros[2] == "confirmar")
+          altaReserva(req, res, parametros[3]);
+        if(parametros[2] == "solicitar")
+          verificaTurno();
         break;
       case "DELETE":
         bajaReserva(res, parametros[2])
