@@ -119,20 +119,31 @@ function altaReserva(req, res, idReserva) {
 }
 
 
-function verificaTurno(req,res,id,date) {
+function verificaTurno(req,res,id) {
 
-  let resultado = 0;
-  bodyParser(req)
-    .then(() => {
-      reservas.forEach(element => {//
-        if (element.branchId == id && element.datetime == date  && element.status) {//despues cambiar condicion
-          resultado = 1;
-        }
-      });
-      res.write(JSON.stringify(resultado));
-      res.end()
-    })
-    .catch(error => console.error(error));
+    let resultado = 0;
+    let reserva = reservas.find(r => r.id == idReserva);
+    let respuesta = {
+      resultado : 0
+    }
+    if (reserva != undefined) {
+      if (reserva.status == 0) {
+        reserva.status = 1; //prueba, despues cambiarlo
+        respuesta.resultado = 1;
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.write(JSON.stringify(respuesta));
+      }
+      else{
+        res.writeHead(200, { 'Content-Type': 'application/json' });//verificar este caso, creo que no es asi
+        res.write(JSON.stringify(respuesta));
+      }
+    } else {
+      //Devuelvo error
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.write(JSON.stringify(respuesta));
+    }
+    res.end();
+
 }
 const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
