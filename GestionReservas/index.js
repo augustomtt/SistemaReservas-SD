@@ -119,13 +119,13 @@ function altaReserva(req, res, idReserva) {
 }
 
 
-function verificaTurno(req,res) {
+function verificaTurno(req,res,id,date) {
 
   let resultado = 0;
   bodyParser(req)
     .then(() => {
-      reservas.forEach(element => {
-        if (element.branchId == id && element.status) {
+      reservas.forEach(element => {//
+        if (element.branchId == id && element.datetime == date  && element.status) {//despues cambiar condicion
           resultado = 1;
         }
       });
