@@ -124,22 +124,11 @@ function verificaTurno(req,res) {
   let resultado = 0;
   bodyParser(req)
     .then(() => {
-
       reservas.forEach(element => {
         if (element.branchId == id && element.status) {
           resultado = 1;
         }
       });
-      if (resultado) {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        //Guardo el archivo nuevamente
-        fs.writeFile('reservas.json', JSON.stringify(reservas), 'utf8', (err) => {
-          if (err) throw err;
-        });
-      }
-
-      else
-        res.writeHead(400, { 'Content-Type': 'application/json' });
       res.write(JSON.stringify(resultado));
       res.end()
     })
