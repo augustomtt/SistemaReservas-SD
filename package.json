@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "express-jwt": "^7.7.7",
+    "express-oauth2-jwt-bearer": "^1.2.0"
+  }
+}
