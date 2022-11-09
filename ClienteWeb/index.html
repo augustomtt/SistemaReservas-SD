@@ -9,10 +9,23 @@
   </head>
   <body>
     <header>
-      <h1 class="text-center">Reservas</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Reservas</a>
+    
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="index.html">Inicio <span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link" href="reservas.html">Mis Reservas</a>
+          <a class="nav-item nav-link" href="registro.html">Registrarse</a>
+        </div>
+      </div>
+    </nav>
+  
+    
     </header>
 
     <main id="main-page">
+      <h1 class="text-center">Reservas</h1>
       <div class="mt-5 row justify-content-center">
             
           <form  action="">
@@ -39,7 +52,7 @@
                 <legend class="w-auto">Datos Reserva</legend>
            
             <div class="pt-3 form-group">
-                <iframe id="map" src="https://app.cartes.io/maps/048eebe4-8dac-46e2-a947-50b6b8062fec?lat=38.75408327579141&lng=-10.283203125000002&zoom=3" width="100%"
+                <iframe id="map" src="" width="100%"
                 height="400" frameborder="0"></iframe>
               </div>
                 <div class="pt-3 form-group">
@@ -52,14 +65,14 @@
                 <div class="pt-3 form-group">
                   <label  for="lista_dias" id="label_dias">Dia</label>
                   <select  name="dias" id="lista_dias">
-                    <option value="0">Seleccione un dia...</option>
+                  
                   </select>
                 </div>
 
                 <div class="pt-3 form-group">
                   <label  for="lista_horas" id="label_horas">Hora</label>
                   <select  name="horas" id="lista_horas">
-                    <option value="0">Seleccione una hora...</option>
+                  
                   </select>
                 </div>
 

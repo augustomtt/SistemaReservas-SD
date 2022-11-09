@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded',function(e){
 
 
       // Aqui deberia hacerse el post de la reserva
-      
+      // Primero debe hacerse la verifiacacion
       
       const request = fetch("http://localhost:3000/api/reservas/"+listaHora.value,{
         method: "POST",
@@ -29,6 +29,8 @@ document.addEventListener('DOMContentLoaded',function(e){
     ).then(res =>{
       if(res.status == 200)
       alert("Turno confirmado correctamente");
+      else
+      alert("Hubo un problema, no se confirmo la reserva")
     })
     .catch(error => console.error(error))
 
@@ -53,14 +55,14 @@ document.addEventListener('DOMContentLoaded',function(e){
     e.preventDefault();
     let options = listaHora.querySelectorAll('option')
     options.forEach(o => {if(o.value!=0)o.remove()});
-    if(listaDia.value!=99 && listaDia.value!=0)
+    if(listaDia.value!=0)
     cargarHora(sucursal.value,listaDia.text);
 
   });
 
 
   function cargarDias(idSucursal){
-    const request = fetch("http://localhost:3000/api/reservas/?branchId="+idSucursal+"&userId=",{
+    const request = fetch("http://localhost:3000/api/reservas/?branchId="+idSucursal+"&userId=-1",{
       method: "GET",
       headers: {'Accept': 'application/json',
     // 'Access-Control-Allow-Origin': '*'    	
@@ -69,11 +71,15 @@ document.addEventListener('DOMContentLoaded',function(e){
     )
     .then(res =>res.json())
     .then(data => {
-      if(data.messageError==undefined){
+      if(data.msg==undefined){
+        let option  = document.createElement('option')
+          option.value = 0;
+          option.text = "Seleccione un dia";
         data.forEach(element => {
           let option  = document.createElement('option')
           option.value = element.id;
-          option.text = new Date(element.datetime).toLocaleDateString();
+          let fecha = (element.datetime).split("T")
+          option.text = fecha[0];
           let options = listaDia.querySelectorAll('option');
           encontro = false;
           options.forEach(o => {if(o.text==option.text)
@@ -85,11 +91,11 @@ document.addEventListener('DOMContentLoaded',function(e){
         }
         else{
           let option1  = document.createElement('option')
-          option1.value = 99;
+          option1.value = 0;
           option1.text = data.messageError;
           listaDia.appendChild(option1);
           let option2  = document.createElement('option')
-          option2.value = 99;
+          option2.value = 0;
           option2.text = data.messageError;
           listaHora.appendChild(option2);
         } 
@@ -103,7 +109,7 @@ document.addEventListener('DOMContentLoaded',function(e){
     
     }) */
   function cargarHora(idSucursal,dia){
-    const request = fetch("http://localhost:3000/api/reservas/?branchId="+idSucursal+"&dateTime="+dia+"&userId=",{
+    const request = fetch("http://localhost:3000/api/reservas/?branchId="+idSucursal+"&dateTime="+dia+"&userId=-1",{
       method: "GET",
       headers: {'Accept': 'application/json',
     // 'Access-Control-Allow-Origin': '*'    	
@@ -112,7 +118,10 @@ document.addEventListener('DOMContentLoaded',function(e){
     )
     .then(res =>res.json())
     .then(data => {
-      if(data.messageError==undefined){
+      let option  = document.createElement('option')
+      option.value = 0;
+      option.text = "Seleccione una hora";
+      if(data.msg==undefined){
           
         data.forEach(element => {   let option  = document.createElement('option')
         option.value = element.id;
@@ -150,7 +159,7 @@ document.addEventListener('DOMContentLoaded',function(e){
     .then(data => {
     data.forEach(element => {
       let option  = document.createElement('option')
-      option.value = element.id;
+      option.value = 0;
       option.text = element.name;
     sucursal.appendChild(option)
       });
