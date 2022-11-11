@@ -2,6 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('url');
 var reservas = require('./reservas.json');
+var config = require('./config.json');
 
 function bodyParser(request) {
   return new Promise((resolve, reject) => {
@@ -67,7 +68,7 @@ function getReserva(res, idReserva) {
   res.end();
 }
 
-function bajaReserva(res, idReserva) { // status 0 tambn
+function bajaReserva(res, idReserva) { 
 
   let reserva = reservas.find(r => r.id == idReserva);
   let respuesta = {
@@ -90,8 +91,8 @@ function bajaReserva(res, idReserva) { // status 0 tambn
   res.end()
 }
 
-function altaReserva(req, res, idReserva) { // status a 2, verifico que status sea 1 y user Id
-
+function altaReserva(req, res, idReserva) { 
+  let date="";
   let respuesta = {
     msg:""
   };
@@ -104,26 +105,57 @@ function altaReserva(req, res, idReserva) { // status a 2, verifico que status s
           element.email = req.body.email;
           element.userId = req.body.userId;
           element.status = 2;
+          date = element.datetime;
           resultado = 1;
         }
       });
       if (resultado) {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        //Guardo el archivo nuevamente
-        respuesta.msg = "Reserva confirmada correctamente";
-        fs.writeFile('reservas.json', JSON.stringify(reservas), 'utf8', (err) => {
-          if (err) throw err;
-        });
-        //comunicarse con notificacion.
-      }
 
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            respuesta.msg = "Reserva confirmada correctamente";
+            fs.writeFile('reservas.json', JSON.stringify(reservas), 'utf8', (err) => {
+              if (err) throw err;
+            });
+
+            //comunicarse con notificacion.
+            const options = {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              } 
+            }/*
+            const request = http.request("http://localhost:"+ config.puertoNotificacion+"/api/notificacion",options,function(response){
+              let body = ''
+
+              response.on('data', (chunk) => {
+                body += chunk;
+              });
+
+              response.on('end', () => {
+                res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
+                res.write(JSON.stringify(body));
+                res.end();
+              });
+
+              response.on('close', () => {
+                console.log('Connection closed with Notificacion');
+              });
+            });
+            request.write(JSON.stringify({
+              "destinatario": req.body.email,
+              "asunto": "Notificacion Reserva",
+              "cuerpo":  `Tu reserva del dia ${new Date(dateTime).toISOString} fue confirmada con exito`
+            }));
+            request.end();*/
+    
+      }
       else{
         res.writeHead(404, { 'Content-Type': 'application/json' });
         respuesta.msg = "Confirmacion Incorrecta";
       }
         
       res.write(JSON.stringify(respuesta));
-      res.end()
+      res.end();
     })
     .catch(error => console.error(error));
 }
@@ -142,6 +174,9 @@ function verificaTurno(req,res,idReserva) { // cambio status de 0 a 1, y pongo u
       if (reserva.status == 0) {
         reserva.status = 1;
         reserva.userId = req.body.userId; 
+        fs.writeFile('reservas.json', JSON.stringify(reservas), 'utf8', (err) => {
+          if (err) throw err;
+        });
         res.writeHead(200, { 'Content-Type': 'application/json' });
         respuesta.msg = "Turno Verificado correctamente";
         res.write(JSON.stringify(respuesta));
@@ -193,7 +228,7 @@ const server = http.createServer((req, res) => {
         if(parametros[2] == "confirmar")
           altaReserva(req, res, parametros[3]);
         if(parametros[2] == "solicitar")
-          verificaTurno();
+          verificaTurno(req,res,parametros[3]);
         break;
       case "DELETE":
         bajaReserva(res, parametros[2])
@@ -201,7 +236,7 @@ const server = http.createServer((req, res) => {
     }
   }
 })
-puerto = 8000;
-server.listen(puerto);
-console.log('Gestion Reservas', puerto);
+
+server.listen(config.puerto);
+console.log('Gestion Reservas', config.puerto);
 
