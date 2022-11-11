@@ -1,8 +1,14 @@
  
-
+/*<div class="">
+          <button id="login" class="btn btn-primary center-block">Registrarse/Loggearte</button>
+          <button id="logout" class="btn btn-primary">Invitado</button>
+        </div>*/
 auth0.createAuth0Client({
+  responseType: "token id_token",
+  "audience": "https://dev-pn7zgl7ckp8stzea.us.auth0.com/api/v2/", 
     domain: "dev-pn7zgl7ckp8stzea.us.auth0.com",
-    clientId: "idK4ciseIiaaR0GCbBVVdxxNJCoib86M",
+    clientId: "KMWqrOft0FpDJNmnzYriye6rOAQpXqQ9",
+    "responseType": "token id_token",
     authorizationParams: {
       redirect_uri: window.location.origin
     }
@@ -14,7 +20,7 @@ auth0.createAuth0Client({
       e.preventDefault();
       console.log(window.location.origin)
       //console.log(authorizationParams.redirect_uri);
-      
+      //throw Error();
       auth0Client.loginWithRedirect();
     });
   
@@ -39,7 +45,7 @@ auth0.createAuth0Client({
   
     // Assumes an element with id "profile" in the DOM
     const profileElement = document.getElementById("profile");
-  
+  /*
     if (isAuthenticated) {
       profileElement.style.display = "block";
       profileElement.innerHTML = `
@@ -48,6 +54,6 @@ auth0.createAuth0Client({
             `;
     } else {
       profileElement.style.display = "none";
-    }
+    }*/
   });
   
