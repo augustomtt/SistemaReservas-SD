@@ -5,7 +5,7 @@
         </div>*/
 auth0.createAuth0Client({
   responseType: "token id_token",
-  "audience": "https://dev-pn7zgl7ckp8stzea.us.auth0.com/api/v2/", 
+  audience: "https://dev-pn7zgl7ckp8stzea.us.auth0.com/api/v2/", 
     domain: "dev-pn7zgl7ckp8stzea.us.auth0.com",
     clientId: "KMWqrOft0FpDJNmnzYriye6rOAQpXqQ9",
     "responseType": "token id_token",
