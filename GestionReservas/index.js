@@ -67,7 +67,7 @@ function getReserva(res, idReserva) {
   res.end();
 }
 
-function bajaReserva(res, idReserva) {
+function bajaReserva(res, idReserva) { // status 0 tambn
 
   let reserva = reservas.find(r => r.id == idReserva);
   let respuesta = {
@@ -76,6 +76,7 @@ function bajaReserva(res, idReserva) {
   if (reserva != undefined) {
     reserva.email = null;
     reserva.userId = -1;
+    reserva.status = 0;
     res.writeHead(200, { 'Content-Type': 'application/json' });
     respuesta.msg = "Turno eliminado correctamente"
     fs.writeFile('reservas.json', JSON.stringify(reservas), 'utf8', (err) => {
@@ -89,60 +90,76 @@ function bajaReserva(res, idReserva) {
   res.end()
 }
 
-function altaReserva(req, res, idReserva) {
+function altaReserva(req, res, idReserva) { // status a 2, verifico que status sea 1 y user Id
 
+  let respuesta = {
+    msg:""
+  };
   let resultado = 0;
   bodyParser(req)
     .then(() => {
 
       reservas.forEach(element => {
-        if (element.id == idReserva) {
+        if (element.id == idReserva && element.userId==req.body.userId && element.status==1) {
           element.email = req.body.email;
           element.userId = req.body.userId;
+          element.status = 2;
           resultado = 1;
         }
       });
       if (resultado) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         //Guardo el archivo nuevamente
+        respuesta.msg = "Reserva confirmada correctamente";
         fs.writeFile('reservas.json', JSON.stringify(reservas), 'utf8', (err) => {
           if (err) throw err;
         });
+        //comunicarse con notificacion.
       }
 
-      else
-        res.writeHead(400, { 'Content-Type': 'application/json' });
-      res.write(JSON.stringify(resultado));
+      else{
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        respuesta.msg = "Confirmacion Incorrecta";
+      }
+        
+      res.write(JSON.stringify(respuesta));
       res.end()
     })
     .catch(error => console.error(error));
 }
 
 
-function verificaTurno(req,res,id) {
+function verificaTurno(req,res,idReserva) { // cambio status de 0 a 1, y pongo userId
 
-    let resultado = 0;
-    let reserva = reservas.find(r => r.id == idReserva);
     let respuesta = {
-      resultado : 0
-    }
+      msg:""
+    };
+    bodyParser(req)
+    .then(()=>{
+      let reserva = reservas.find(r => r.id == idReserva);
+  
     if (reserva != undefined) {
       if (reserva.status == 0) {
-        reserva.status = 1; //prueba, despues cambiarlo
-        respuesta.resultado = 1;
+        reserva.status = 1;
+        reserva.userId = req.body.userId; 
         res.writeHead(200, { 'Content-Type': 'application/json' });
+        respuesta.msg = "Turno Verificado correctamente";
         res.write(JSON.stringify(respuesta));
       }
       else{
-        res.writeHead(200, { 'Content-Type': 'application/json' });//verificar este caso, creo que no es asi
+        res.writeHead(404, { 'Content-Type': 'application/json' });//verificar este caso, creo que no es asi
+        respuesta.msg = "Error en verificacion, el turno esta reservado";
         res.write(JSON.stringify(respuesta));
       }
     } else {
       //Devuelvo error
       res.writeHead(404, { 'Content-Type': 'application/json' });
+      respuesta.msg = "Error en verificacion, reserva incorrecta";
       res.write(JSON.stringify(respuesta));
     }
     res.end();
+    })
+    .catch(error => console.error(error));
 
 }
 const server = http.createServer((req, res) => {
@@ -156,7 +173,7 @@ const server = http.createServer((req, res) => {
   console.log(`URL: ${url} - METHOD: ${method}`);
 
 
-  if (url.startsWith("/api/reservas")) {
+  if (url.startsWith("/api/reservas")){
     let parametros = url.split("/");
     parametros = parametros.filter(el => el != '')   //filtro los vacios
     console.log(parametros);
@@ -184,7 +201,6 @@ const server = http.createServer((req, res) => {
     }
   }
 })
-
 puerto = 8000;
 server.listen(puerto);
 console.log('Gestion Reservas', puerto);

@@ -1,14 +1,24 @@
 document.addEventListener('DOMContentLoaded',function(e){
   e.preventDefault();
-  var btnConfirm = document.getElementById("btn-confirm")
-  var mapa = document.getElementById("map")
-  var sucursal = document.getElementById("sucursales")
-  var listaDia = document.getElementById("lista_dias")
-  var listaHora = document.getElementById("lista_horas")
+
+  //var config = require("")
+  var btnConfirm = document.getElementById("btn-confirm");
+  var btnSolicitar = document.getElementById("btn-solicitar");
+  var mapa = document.getElementById("map");
+  var sucursal = document.getElementById("sucursales");
+  var listaDia = document.getElementById("lista_dias");
+  var listaHora = document.getElementById("lista_horas");
   var email = document.getElementById("email");
+  var mapId = "b67e1717-7963-4d89-9f7f-fd765e55d68e";
+
+  btnSolicitar.addEventListener('click',function(e){
+    e.preventDefault();
 
 
 
+
+    alert("Tiene dos minutos para conpletar sus datos y confirmar el turno");
+  });
   btnConfirm.addEventListener('click',function(e){
       e.preventDefault();
 
@@ -32,7 +42,7 @@ document.addEventListener('DOMContentLoaded',function(e){
       else
       alert("Hubo un problema, no se confirmo la reserva")
     })
-    .catch(error => console.error(error))
+    .catch( alert("Hubo un problema, no se confirmo la reserva"))
 
   
 
@@ -159,7 +169,7 @@ document.addEventListener('DOMContentLoaded',function(e){
     .then(data => {
     data.forEach(element => {
       let option  = document.createElement('option')
-      option.value = 0;
+      option.value = element.id;
       option.text = element.name;
     sucursal.appendChild(option)
       });
@@ -169,10 +179,10 @@ document.addEventListener('DOMContentLoaded',function(e){
 
   })();
 
-
+//a77236b3-1a4b-4688-98cb-bbeb52fb1ac5
   //Prueba de mostrar el mapa de cartes.io
-   
-        var url = 'https://cartes.io/api/maps'
+   /*
+      var url = 'https://cartes.io/api/maps'
       const request = fetch(url,{
           method: "POST",
           headers: {'Accept': 'application/json',
@@ -182,6 +192,7 @@ document.addEventListener('DOMContentLoaded',function(e){
         }
       
       ).then(res =>res.json())
-      .then(data => {console.log(data);mapa.src = "https://app.cartes.io/maps/"+data.uuid+"/embed?type=map"} )
+      .then(data => {console.log(data);mapa.src = "https://app.cartes.io/maps/"+data.uuid+"/embed?type=map&lat=-37.998768161736486&lng=-57.52020835876465&zoom=11"} )*/
 });
 
+//&lat=-36.264206799345125&lng=-58.03253173828126
