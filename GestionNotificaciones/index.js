@@ -41,7 +41,7 @@ const server = http.createServer((req, res) => {
             });
 
             response.on('end', () => {
-              res.writeHead(200, { 'Content-Type': 'application/json' });
+              res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
               res.write(JSON.stringify(bodyRespuesta));
               res.end();
             });

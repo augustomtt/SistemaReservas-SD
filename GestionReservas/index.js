@@ -30,8 +30,9 @@ function getTurnos(res, queryParams) {
     let userId = (queryParams.userId != undefined) ? queryParams.userId : r.userId;
     let branchId = (queryParams.branchId != undefined) ? queryParams.branchId : r.branchId;
     let fecha = r.datetime.split("T");
-    let dateTime = (queryParams.datetime != undefined) ? queryParams.datetime: fecha[0];
-    
+ 
+    let dateTime = (queryParams.dateTime != undefined) ? queryParams.dateTime: fecha[0];
+
     if (r.userId == userId && r.branchId == branchId && fecha[0] == dateTime)
       turnos.push(r);
   });
@@ -123,7 +124,7 @@ function altaReserva(req, res, idReserva) {
               headers: {
                 'Content-Type': 'application/json'
               } 
-            }/*
+            }
             const request = http.request("http://localhost:"+ config.puertoNotificacion+"/api/notificacion",options,function(response){
               let body = ''
 
@@ -144,9 +145,9 @@ function altaReserva(req, res, idReserva) {
             request.write(JSON.stringify({
               "destinatario": req.body.email,
               "asunto": "Notificacion Reserva",
-              "cuerpo":  `Tu reserva del dia ${new Date(dateTime).toISOString} fue confirmada con exito`
+              "cuerpo":  `Tu reserva del dia ${new Date(date).toISOString} fue confirmada con exito`
             }));
-            request.end();*/
+            request.end();
     
       }
       else{
@@ -211,7 +212,7 @@ const server = http.createServer((req, res) => {
   if (url.startsWith("/api/reservas")){
     let parametros = url.split("/");
     parametros = parametros.filter(el => el != '')   //filtro los vacios
-    console.log(parametros);
+    //console.log(parametros);
     switch (method) {
       //&& parametros[1].includes("reservas?")
       case "GET":

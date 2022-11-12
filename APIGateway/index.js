@@ -78,6 +78,7 @@ const server = http.createServer((req, res) => {
 
               response.on('end', () => {
                 res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
+                body = JSON.parse(body);
                 res.write(JSON.stringify(body));
                 res.end();
               });
@@ -88,12 +89,13 @@ const server = http.createServer((req, res) => {
             });
             if(parametros[2] == "solicitar"){
               request.write(JSON.stringify({
-                "email": req.body.email,
+              
                 "userId": req.body.userId
               }));
             }
             if(parametros[2] == "confirmar"){
               request.write(JSON.stringify({
+                "email": req.body.email,
                 "userId": req.body.userId
               }));
             }
@@ -104,13 +106,8 @@ const server = http.createServer((req, res) => {
 
         break;
 
-        case "DELETE":
+        case "DELETE": // baja de reserva
           break;
-    }
-  }
-  if(url.startsWith("/api/notifiacion")){
-    if(method == "POST"){
-
     }
   }
 })

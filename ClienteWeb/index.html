@@ -28,15 +28,14 @@
       <h1 class="text-center">Reservas</h1>
       <div class="mt-5 row justify-content-center">
             
-          <form  action="">
+          <form id="subscribe" action="">
 
            
               <fieldset class="border border-secondary rounded p-3 mt-5">
                 <legend class="w-auto">Datos Reserva</legend>
            
             <div class="pt-3 form-group">
-                <iframe id="map" src="https://app.cartes.io/maps/b67e1717-7963-4d89-9f7f-fd765e55d68e/embed?type=map&lat=-37.998768161736486&lng=-57.52020835876465&zoom=11" width="100%"
-                height="400" frameborder="0"></iframe>
+               
               </div>
                 <div class="pt-3 form-group">
                   <label for="sucursales">Sucursales</label>
@@ -61,25 +60,27 @@
 
               </fieldset>
               <button  class="m-3 btn btn-primary" id="btn-solicitar">Solicitar</button>
-              <fieldset class="border border-secondary rounded p-3">
-                <legend class="w-auto">Datos Personales</legend>
-                      <div class="pt-4 form-group">
-                        <label for="name">Nombre</label>
-                        <input id="name" type="text" />
-                      </div>
-                        
+              
+                  <fieldset style="display: none;" id="datos" class="border border-secondary rounded p-3">
+                    <legend class="w-auto">Datos Personales</legend>
+                          <div class="pt-4 form-group">
+                            <label for="name">Nombre</label>
+                            <input id="name" type="text" />
+                          </div>
+                            
 
-                      <div class="pt-4 form-group">
-                        <label for="lastname">Apellido</label>
-                        <input id="lastname" type="text" />
-                      </div>
+                          <div class="pt-4 form-group">
+                            <label for="lastname">Apellido</label>
+                            <input id="lastname" type="text" />
+                          </div>
 
-                      <div class="pt-4 form-group">
-                        <label for="email">Email</label>
-                        <input id="email" type="text" />
-                      </div>
-              </fieldset>
-              <button  class="m-3 btn btn-primary" id="btn-confirm">Confirmar</button>
+                          <div class="pt-4 form-group">
+                            <label for="email">Email</label>
+                            <input id="email" type="text" />
+                          </div>
+                  </fieldset>
+              <button  style="display: none;" type="submit" class="m-3 btn btn-primary" id="btn-confirm">Confirmar</button>
+          
             </form>
              
         </div>
