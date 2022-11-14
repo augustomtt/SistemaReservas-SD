@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded',function(e){
   e.preventDefault();
-  /* <iframe id="map" src="https://app.cartes.io/maps/b67e1717-7963-4d89-9f7f-fd765e55d68e/embed?type=map&lat=-37.998768161736486&lng=-57.52020835876465&zoom=11" width="100%"
-                height="400" frameborder="0"></iframe> */
   var btnConfirm = document.getElementById("btn-confirm");
   var btnSolicitar = document.getElementById("btn-solicitar");
   var mapa = document.getElementById("map");
@@ -9,9 +7,9 @@ document.addEventListener('DOMContentLoaded',function(e){
   var listaDia = document.getElementById("lista_dias");
   var listaHora = document.getElementById("lista_horas");
   var email = document.getElementById("email");
-  var mapId = "b67e1717-7963-4d89-9f7f-fd765e55d68e";
   var form = document.getElementById("subscribe");
   var datos = document.getElementById("datos");
+  
 
 
   btnSolicitar.addEventListener('click',function(e){
@@ -36,13 +34,13 @@ document.addEventListener('DOMContentLoaded',function(e){
         alert("Tiene dos minutos para conpletar sus datos y confirmar el turno");
       }
       else
-        alert("1 Hubo un problema, no se pudo solicitar la reserva")
+        alert("Hubo un problema, no se pudo solicitar la reserva")
     })
     .catch( error => {alert("Hubo un problema, no se pudo solicitar la reserva");console.error(error)})
   });
   btnConfirm.addEventListener('click',function(e){
       e.preventDefault();
-      console.log(email.value);
+      
       //chequear que no esten los campos vacios
       
       const request = fetch("http://localhost:3000/api/reservas/confirmar/"+listaHora.value,{
@@ -97,7 +95,10 @@ document.addEventListener('DOMContentLoaded',function(e){
       method: "GET",
       headers: {'Accept': 'application/json',
     // 'Access-Control-Allow-Origin': '*'    	
-    }
+    },body:JSON.stringify({
+        "userId" : 0,
+        "email": email.value
+      })
     }
     )
     .then(res =>{
@@ -166,7 +167,8 @@ document.addEventListener('DOMContentLoaded',function(e){
   .catch(error => console.error(error));
   }
   
-  (function cargarSucursales(){
+ 
+  function cargarSucursales(mapId){
     
     const request = fetch("http://localhost:3000/api/sucursales",{
       method: "GET",
@@ -177,6 +179,23 @@ document.addEventListener('DOMContentLoaded',function(e){
     ).then(res =>res.json())
     .then(data => {
     data.forEach(element => {
+
+      var url = 'https://cartes.io/api/maps/'+mapId+"/markers"
+      const request = fetch(url,{
+          method: "POST",
+          headers: {'Accept': 'application/json',
+          'Content-Type': 'application/json',
+         'Access-Control-Allow-Origin': '*'
+        },body:JSON.stringify({
+          "lat": element.lat,
+          "lng": element.lng,
+          "category_name":element.name
+         })
+        }
+      
+      ).then(res =>res.json())
+      .then(data => {console.log(data)} )
+
       let option  = document.createElement('option')
       option.value = element.id;
       option.text = element.name;
@@ -186,22 +205,24 @@ document.addEventListener('DOMContentLoaded',function(e){
     )
   .catch(error => console.error(error));
 
-  })();
-
-//a77236b3-1a4b-4688-98cb-bbeb52fb1ac5
+  }
   //Prueba de mostrar el mapa de cartes.io
-   /*
+   
       var url = 'https://cartes.io/api/maps'
       const request = fetch(url,{
           method: "POST",
           headers: {'Accept': 'application/json',
-         // 'Content-type': 'text/html'
+          'Content-Type': 'application/json',
          'Access-Control-Allow-Origin': '*'
-        }
+        },body:JSON.stringify({
+          "privacy": "public",
+          "users_can_create_markers":"yes"
+         })
         }
       
       ).then(res =>res.json())
-      .then(data => {console.log(data);mapa.src = "https://app.cartes.io/maps/"+data.uuid+"/embed?type=map&lat=-37.998768161736486&lng=-57.52020835876465&zoom=11"} )*/
+      .then(data => {console.log(data);mapa.src = "https://app.cartes.io/maps/"+data.uuid+"/embed?type=map&lat=-37.998768161736486&lng=-57.52020835876465&zoom=12"; cargarSucursales(data.uuid)} );
+   
+      
 });
 
-//&lat=-36.264206799345125&lng=-58.03253173828126
