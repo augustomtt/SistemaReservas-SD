@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded',function(e){
   var email = document.getElementById("email");
   var form = document.getElementById("subscribe");
   var datos = document.getElementById("datos");
+  var timer;
   
 
 
@@ -32,6 +33,25 @@ document.addEventListener('DOMContentLoaded',function(e){
         datos.style.display = "block";
         btnConfirm.style.display = "block";
         alert("Tiene dos minutos para conpletar sus datos y confirmar el turno");
+        
+        timer  = setTimeout(function(){
+
+          alert("Se termino el tiempo para confirmar la reserva");
+         
+          //fetch para dar de baja la reserva
+          
+          fetch("http://localhost:3000/api/reservas/"+listaHora.value,{
+            method: "DELETE",
+            headers: {'Accept': 'application/json',       
+            }
+          })
+          .then(res => {
+            if(res.status!=200)
+                alert("Error en la baja de la reserva");
+          })
+          .catch((error) => console.error(error));
+          location.reload();
+        },120000);
       }
       else
         alert("Hubo un problema, no se pudo solicitar la reserva")
@@ -56,9 +76,9 @@ document.addEventListener('DOMContentLoaded',function(e){
     ).then(res =>{
       if(res.status == 200){
         alert("Turno confirmado correctamente");
+        clearTimeout(timer); // elimino el timeout
         location.reload();
       }
-      
       else
         alert("Hubo un problema, no se confirmo la reserva")
     })
@@ -85,20 +105,14 @@ document.addEventListener('DOMContentLoaded',function(e){
       let dia = listaDia.options[listaDia.selectedIndex].text;
       cargarHora(sucursal.value,dia);
     }
-    
-
   });
-
 
   function cargarDias(idSucursal){
     const request = fetch("http://localhost:3000/api/reservas?branchId="+idSucursal+"&userId=-1",{
       method: "GET",
       headers: {'Accept': 'application/json',
     // 'Access-Control-Allow-Origin': '*'    	
-    },body:JSON.stringify({
-        "userId" : 0,
-        "email": email.value
-      })
+    }
     }
     )
     .then(res =>{
@@ -130,6 +144,7 @@ document.addEventListener('DOMContentLoaded',function(e){
     )
   .catch(error => {
         alert("No hay turnos con para esa sucursal");
+        console.error(error);
   });
   }
 
