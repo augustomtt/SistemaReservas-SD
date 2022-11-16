@@ -75,18 +75,26 @@ function bajaReserva(res, idReserva) {
   let respuesta = {
     msg: ""
   }
-  if (reserva != undefined) {
-    reserva.email = null;
-    reserva.userId = -1;
-    reserva.status = 0;
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    respuesta.msg = "Turno eliminado correctamente"
-    fs.writeFile('reservas.json', JSON.stringify(reservas), 'utf8', (err) => {
-      if (err) throw err;
-    });
+  if (reserva != undefined){
+    if(reserva.email!=null && reserva.userId!=-1 && reserva.status != 0){
+      reserva.email = null;
+      reserva.userId = -1;
+      reserva.status = 0;
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      respuesta.msg = "Turno eliminado correctamente";
+      fs.writeFile('reservas.json', JSON.stringify(reservas), 'utf8', (err) => {
+        if (err) throw err;
+      });
+    }
+    else{
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      respuesta.msg = "La reserva no esta asociada a ningun usuario";
+    }
+
+   
   } else {
     res.writeHead(404, { 'Content-Type': 'application/json' });
-    respuesta.msg = "No se encuentra ninguna reserva con ese id"
+    respuesta.msg = "No se encuentra ninguna reserva con ese id";
   }
   res.write(JSON.stringify(respuesta));
   res.end()

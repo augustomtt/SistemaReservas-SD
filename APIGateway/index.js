@@ -38,27 +38,27 @@ const server = http.createServer((req, res) => {
   if (url.startsWith("/api/reservas")) {
    
     switch (method) {
-      case "GET":
-        http.get("http://localhost:" + config.puertoReservas + url, respuesta => {//ver si se puede usar URL sin hardcodearla? tal vez extraer la URL de la request
-          //posiblemente con req.connection.remoteAddress y port
-          let data = '';
-          respuesta.on('data', chunk => {
-            data += chunk;
-          });
-          respuesta.on('end', () => {
-            res.writeHead(respuesta.statusCode, { 'Content-Type': 'application/json' });
-            data = JSON.parse(data);
-            res.write(JSON.stringify(data))
-            res.end();
+        case "GET":
+          http.get("http://localhost:" + config.puertoReservas + url, respuesta => {//ver si se puede usar URL sin hardcodearla? tal vez extraer la URL de la request
+            //posiblemente con req.connection.remoteAddress y port
+            let data = '';
+            respuesta.on('data', chunk => {
+              data += chunk;
+            });
+            respuesta.on('end', () => {
+              res.writeHead(respuesta.statusCode, { 'Content-Type': 'application/json' });
+              data = JSON.parse(data);
+              res.write(JSON.stringify(data))
+              res.end();
+            })
+          }).on('error', err => {
+            console.log(err.message);
           })
-        }).on('error', err => {
-          console.log(err.message);
-        })
 
         break;
 
-      case "POST":
-        bodyParser(req)
+        case "POST":
+         bodyParser(req)
           .then(() => {
 
             const options = {
@@ -107,7 +107,36 @@ const server = http.createServer((req, res) => {
         break;
 
         case "DELETE": // baja de reserva
-          break;
+           
+            const options = {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+
+            };
+          
+          
+           const request = http.request("http://localhost:"+ config.puertoReservas + url, options,function  (response){
+                  let body = ''
+
+                  response.on('data', (chunk) => {
+                    body += chunk;
+                  });
+
+                  response.on('end', () => {
+                    res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
+                    body = JSON.parse(body);
+                    res.write(JSON.stringify(body));
+                    res.end();
+                  });
+
+                  response.on('close', () => {
+                    console.log('Connection closed with Reservas');
+                  });
+                });
+                request.end();
+      break;
     }
   }
 })
