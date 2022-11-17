@@ -9,7 +9,7 @@ auth0
     domain: "dev-pn7zgl7ckp8stzea.us.auth0.com",
     clientId: "KMWqrOft0FpDJNmnzYriye6rOAQpXqQ9",
     authorizationParams: {
-      redirect_uri: window.location.origin,
+      redirect_uri: window.location.origin + '/registro.html',
     },
   })
   .then(async (auth0Client) => {
@@ -25,24 +25,25 @@ auth0
         console.log("viva yo")});
     });
 
-   
-      auth0Client.handleRedirectCallback().then((token) =>{
+    if (location.search.includes("state=") &&
+      (location.search.includes("code=") ||
+        location.search.includes("error="))) {
+      auth0Client.handleRedirectCallback().then((token) => {
         console.log("LA SCALONETA")
-      auth0Client.getIdTokenClaims().then(sessionData =>
-        {
+        auth0Client.getIdTokenClaims().then(sessionData => {
           console.log("MESSI PRESIDENTE")
-            console.log(token)
-            console.log(sessionData)
-            if(sessionData) 
-            {
-              window.sessionStorage.setItem('token',sessionData.__raw)
-              window.sessionStorage.setItem('email',sessionData.email)
-              //window.sessionStorage.setItem('userId',generateUserId(sessionData.email))
-            }
-            window.history.replaceState({}, document.title, "/");
-        }); 
+          console.log(token)
+          console.log(sessionData)
+          if (sessionData) {
+            window.sessionStorage.setItem('token', sessionData.__raw)
+            window.sessionStorage.setItem('email', sessionData.email)
+            //window.sessionStorage.setItem('userId',generateUserId(sessionData.email))
+          }
+          window.history.replaceState({}, document.title, "/");
+          window.location.href = "/";
+        });
       });
-    
+    }
 
     // Assumes a button with id "logout" in the DOM
 
