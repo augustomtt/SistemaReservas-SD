@@ -21,16 +21,16 @@ auth0
       console.log(window.location.origin);
       //console.log(authorizationParams.redirect_uri);
       //throw Error();
-      auth0Client.loginWithRedirect().then(token => {console.log(token)});
+      auth0Client.loginWithRedirect().then(token => {console.log(token)
+        console.log("viva yo")});
     });
 
-    if (location.search.includes("state=") && 
-        (location.search.includes("code=") || 
-        location.search.includes("error="))) {
+   
       auth0Client.handleRedirectCallback().then((token) =>{
-        
+        console.log("LA SCALONETA")
       auth0Client.getIdTokenClaims().then(sessionData =>
         {
+          console.log("MESSI PRESIDENTE")
             console.log(token)
             console.log(sessionData)
             if(sessionData) 
@@ -42,7 +42,7 @@ auth0
             window.history.replaceState({}, document.title, "/");
         }); 
       });
-    }
+    
 
     // Assumes a button with id "logout" in the DOM
 
