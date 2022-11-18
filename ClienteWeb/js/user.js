@@ -223,26 +223,19 @@ document.addEventListener('DOMContentLoaded',function(e){
   }
   //Prueba de mostrar el mapa de cartes.io
    
-      var url = 'https://cartes.io/api/maps/'+mapId
+      var url = 'https://cartes.io/api/maps'
        fetch(url,{
-          method: "GET",
+          method: "POST",
           headers: {'Accept': 'application/json',
-         
-        }
+          'Content-Type': 'application/json',
+         'Access-Control-Allow-Origin': '*'
+        },body:JSON.stringify({
+          "privacy": "public",
+          "users_can_create_markers":"yes"
+         }) 
         }
       
       ).then(res =>res.json())
       .then(data => {mapa.src = "https://app.cartes.io/maps/"+data.uuid+"/embed?type=map&lat=-37.998768161736486&lng=-57.52020835876465&zoom=12"; cargarSucursales(data.uuid)} );
-   
-      
 });
 
-/*,body:JSON.stringify({
-          "privacy": "public",
-          "users_can_create_markers":"yes"
-         }) 
-         
-         
-          'Content-Type': 'application/json',
-         'Access-Control-Allow-Origin': '*'
-         */

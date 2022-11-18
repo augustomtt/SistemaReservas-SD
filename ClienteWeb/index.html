@@ -10,33 +10,20 @@
 
   <body>
     <header>
-      <div style="display: none;" id="navegacion-logeado">
+      <div style="display: none;" id="navegacion">
           <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="">Reservas</a>
           
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
                 <a id="boton-inicio" class="nav-item nav-link active" href="">Inicio <span class="sr-only">(current)</span></a>
-                <a id="mis-reservas" class="nav-item nav-link" href="">Mis Reservas</a>
-                <a class="nav-item nav-link" href="#">LogOut</a>
+                <a id="mis-reservas" style="display: none;" class="nav-item nav-link" href="#/reservas">Mis Reservas</a>
+                <a class="nav-item nav-link" id="logout" href="#">LogOut</a>
               </div>
             </div>
           </nav>
         </div>
 
-        <div style="display: none;" id="navegacion-invitado">
-          <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Reservas</a>
-          
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-              <div class="navbar-nav">
-                <a id="boton-inicio" class="nav-item nav-link active" href="">Inicio <span class="sr-only">(current)</span></a>
-                <a id="logout" class="nav-item nav-link" href="#" >LogOut</a>
-              </div>
-            </div>
-          </nav>
-        </div>
-  
     
     </header>
 
@@ -46,11 +33,11 @@
             <h1 class="text-center">Sistema de Reservas</h1>
             <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
               <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="login" data-mdb-toggle="pill" href="#"
+                <a class="nav-link active" id="login" data-mdb-toggle="pill" href="#/logeado"
                   >Login</a>
               </li>
               <li class="nav-item" role="presentation">
-                <a class="nav-link" id="pagina-invitado" data-mdb-toggle="pill" href="#" >Invitado</a>
+                <a class="nav-link" id="pagina-invitado" data-mdb-toggle="pill" href="#/invitado" >Invitado</a>
               </li>
             </ul>
       </div>
@@ -124,6 +111,5 @@
    <script type="text/javascript" src="js/user.js"></script> 
    <script type="text/javascript" src="/js/display.js"></script>
    
-   <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
-   <script src="/js/login.js"></script>    
+  
 </html>
