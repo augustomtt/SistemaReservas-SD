@@ -3,11 +3,11 @@ document.addEventListener('DOMContentLoaded',function(e){
   var btnConfirm = document.getElementById("btn-confirm");
   var btnSolicitar = document.getElementById("btn-solicitar");
   var mapa = document.getElementById("map");
+  var mapId = "55f6ea4a-159d-4905-96ef-ff1d3ce1798d";
   var sucursal = document.getElementById("sucursales");
   var listaDia = document.getElementById("lista_dias");
   var listaHora = document.getElementById("lista_horas");
   var email = document.getElementById("email");
-  var form = document.getElementById("subscribe");
   var datos = document.getElementById("datos");
   var timer;
   
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded',function(e){
         data.forEach(element => {
           let option  = document.createElement('option')
           option.value = element.id;
-          let fecha = (element.datetime).split("T")
+          let fecha = (element.dateTime).split("T")
           option.text = fecha[0];
           let options = listaDia.querySelectorAll('option');
           encontro = false;
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded',function(e){
       option.text = "Seleccione una hora";
         data.forEach(element => {   let option  = document.createElement('option')
         option.value = element.id;
-        let dia =  new Date(element.datetime);
+        let dia =  new Date(element.dateTime);
         let hora = dia.getUTCHours();
         let minutos = dia.getUTCMinutes();
         if(minutos<10)
@@ -223,21 +223,26 @@ document.addEventListener('DOMContentLoaded',function(e){
   }
   //Prueba de mostrar el mapa de cartes.io
    
-      var url = 'https://cartes.io/api/maps'
-      const request = fetch(url,{
-          method: "POST",
+      var url = 'https://cartes.io/api/maps/'+mapId
+       fetch(url,{
+          method: "GET",
           headers: {'Accept': 'application/json',
-          'Content-Type': 'application/json',
-         'Access-Control-Allow-Origin': '*'
-        },body:JSON.stringify({
-          "privacy": "public",
-          "users_can_create_markers":"yes"
-         })
+         
+        }
         }
       
       ).then(res =>res.json())
-      .then(data => {console.log(data);mapa.src = "https://app.cartes.io/maps/"+data.uuid+"/embed?type=map&lat=-37.998768161736486&lng=-57.52020835876465&zoom=12"; cargarSucursales(data.uuid)} );
+      .then(data => {mapa.src = "https://app.cartes.io/maps/"+data.uuid+"/embed?type=map&lat=-37.998768161736486&lng=-57.52020835876465&zoom=12"; cargarSucursales(data.uuid)} );
    
       
 });
 
+/*,body:JSON.stringify({
+          "privacy": "public",
+          "users_can_create_markers":"yes"
+         }) 
+         
+         
+          'Content-Type': 'application/json',
+         'Access-Control-Allow-Origin': '*'
+         */

@@ -7,89 +7,123 @@
     <title>TP Sistemas</title>
     <link href="styles/bootstrap.css" rel="stylesheet" type="text/css" />
   </head>
+
   <body>
     <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Reservas</a>
-    
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-item nav-link active" href="index.html">Inicio <span class="sr-only">(current)</span></a>
-          <a class="nav-item nav-link" href="reservas.html">Mis Reservas</a>
-          <a class="nav-item nav-link" href="registro.html">LogOut</a>
+      <div style="display: none;" id="navegacion-logeado">
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="">Reservas</a>
+          
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                <a id="boton-inicio" class="nav-item nav-link active" href="">Inicio <span class="sr-only">(current)</span></a>
+                <a id="mis-reservas" class="nav-item nav-link" href="">Mis Reservas</a>
+                <a class="nav-item nav-link" href="#">LogOut</a>
+              </div>
+            </div>
+          </nav>
         </div>
-      </div>
-    </nav>
+
+        <div style="display: none;" id="navegacion-invitado">
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Reservas</a>
+          
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                <a id="boton-inicio" class="nav-item nav-link active" href="">Inicio <span class="sr-only">(current)</span></a>
+                <a id="logout" class="nav-item nav-link" href="#" >LogOut</a>
+              </div>
+            </div>
+          </nav>
+        </div>
   
     
     </header>
 
     <main id="main-page">
-      <h1 class="text-center">Reservas</h1>
-      <div class="mt-5 row justify-content-center">
-            
-          <form id="subscribe" action="">
 
-           
-              <fieldset class="border border-secondary rounded p-3 mt-5">
-                <iframe id="map" src="" width="100%"
-                height="400" frameborder="0"></iframe>
-                <legend class="w-auto">Datos Reserva</legend>
-           
-            <div class="pt-3 form-group">
-               
-              </div>
-                <div class="pt-3 form-group">
-                  <label for="sucursales">Sucursales</label>
-                  <select name="sucursales" id="sucursales">
-                    <option value="0">Seleccione Una Sucursal…</option>
-                  </select>
-                </div>
-                
-                <div class="pt-3 form-group">
-                  <label  for="lista_dias" id="label_dias">Dia</label>
-                  <select  name="dias" id="lista_dias">
+      <div  id="logeo">
+            <h1 class="text-center">Sistema de Reservas</h1>
+            <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+              <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="login" data-mdb-toggle="pill" href="#"
+                  >Login</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pagina-invitado" data-mdb-toggle="pill" href="#" >Invitado</a>
+              </li>
+            </ul>
+      </div>
+      <div style="display: none;" id="main-form">
+              <h1 class="text-center">Reservas</h1>
+              <div class="mt-5 row justify-content-center">
+
+                  <form id="subscribe" action="">           
+                      <fieldset class="border border-secondary rounded p-3 mt-5">
+                        <iframe id="map" src="" width="100%"
+                        height="400" frameborder="0"></iframe>
+                        <legend class="w-auto">Datos Reserva</legend>
                   
-                  </select>
-                </div>
+                    <div class="pt-3 form-group">
+                      
+                      </div>
+                        <div class="pt-3 form-group">
+                          <label for="sucursales">Sucursales</label>
+                          <select name="sucursales" id="sucursales">
+                            <option value="0">Seleccione Una Sucursal…</option>
+                          </select>
+                        </div>
+                        
+                        <div class="pt-3 form-group">
+                          <label  for="lista_dias" id="label_dias">Dia</label>
+                          <select  name="dias" id="lista_dias">
+                          
+                          </select>
+                        </div>
 
-                <div class="pt-3 form-group">
-                  <label  for="lista_horas" id="label_horas">Hora</label>
-                  <select  name="horas" id="lista_horas">
+                        <div class="pt-3 form-group">
+                          <label  for="lista_horas" id="label_horas">Hora</label>
+                          <select  name="horas" id="lista_horas">
+                          
+                          </select>
+                        </div>
+
+                      </fieldset>
+                      <button  class="m-3 btn btn-primary" id="btn-solicitar">Solicitar</button>
+                      
+                          <fieldset style="display: none;" id="datos" class="border border-secondary rounded p-3">
+                            <legend class="w-auto">Datos Personales</legend>
+                                  <div class="pt-4 form-group">
+                                    <label for="name">Nombre</label>
+                                    <input id="name" type="text" />
+                                  </div>
+                                    
+
+                                  <div class="pt-4 form-group">
+                                    <label for="lastname">Apellido</label>
+                                    <input id="lastname" type="text" />
+                                  </div>
+
+                                  <div class="pt-4 form-group">
+                                    <label for="email">Email</label>
+                                    <input id="email" type="text" />
+                                  </div>
+                          </fieldset>
+                      <button  style="display: none;" type="submit" class="m-3 btn btn-primary" id="btn-confirm">Confirmar</button>
                   
-                  </select>
+                    </form>
+                    
                 </div>
-
-              </fieldset>
-              <button  class="m-3 btn btn-primary" id="btn-solicitar">Solicitar</button>
-              
-                  <fieldset style="display: none;" id="datos" class="border border-secondary rounded p-3">
-                    <legend class="w-auto">Datos Personales</legend>
-                          <div class="pt-4 form-group">
-                            <label for="name">Nombre</label>
-                            <input id="name" type="text" />
-                          </div>
-                            
-
-                          <div class="pt-4 form-group">
-                            <label for="lastname">Apellido</label>
-                            <input id="lastname" type="text" />
-                          </div>
-
-                          <div class="pt-4 form-group">
-                            <label for="email">Email</label>
-                            <input id="email" type="text" />
-                          </div>
-                  </fieldset>
-              <button  style="display: none;" type="submit" class="m-3 btn btn-primary" id="btn-confirm">Confirmar</button>
-          
-            </form>
-             
-        </div>
-     
+      </div>
     </main>
 
     <footer></footer>
-    <script type="text/javascript" src="js/user.js"></script> 
+    
    </body>
+
+   <script type="text/javascript" src="js/user.js"></script> 
+   <script type="text/javascript" src="/js/display.js"></script>
+   
+   <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+   <script src="/js/login.js"></script>    
 </html>

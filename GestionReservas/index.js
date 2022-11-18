@@ -29,7 +29,7 @@ function getTurnos(res, queryParams) {
   reservas.forEach(r => {
     let userId = (queryParams.userId != undefined) ? queryParams.userId : r.userId;
     let branchId = (queryParams.branchId != undefined) ? queryParams.branchId : r.branchId;
-    let fecha = r.datetime.split("T");
+    let fecha = r.dateTime.split("T");
  
     let dateTime = (queryParams.dateTime != undefined) ? queryParams.dateTime: fecha[0];
 
@@ -114,7 +114,7 @@ function altaReserva(req, res, idReserva) {
           element.email = req.body.email;
           element.userId = req.body.userId;
           element.status = 2;
-          date = element.datetime;
+          date = element.dateTime;
           resultado = 1;
         }
       });
