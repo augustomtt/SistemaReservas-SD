@@ -1,0 +1,6 @@
+{
+    "puerto": 3001,
+    "puertoSucursales":8080,
+    "puertoReservas":8000,
+    "puertoNotificaciones":7070
+}

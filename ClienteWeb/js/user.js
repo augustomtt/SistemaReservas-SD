@@ -1,4 +1,6 @@
-document.addEventListener('DOMContentLoaded',function(e){
+
+
+document.addEventListener('DOMContentLoaded', function (e) {
   e.preventDefault();
   var btnConfirm = document.getElementById("btn-confirm");
   var btnSolicitar = document.getElementById("btn-solicitar");
@@ -10,6 +12,10 @@ document.addEventListener('DOMContentLoaded',function(e){
   var email = document.getElementById("email");
   var datos = document.getElementById("datos");
   var timer;
+  var port;
+  var userId;
+  var token;
+
   
 
 
@@ -18,12 +24,22 @@ document.addEventListener('DOMContentLoaded',function(e){
     // chequear que no esten los campos vacios.
     
     // llamar a verifica turno, y bloquear recurso
-    const request = fetch("http://localhost:3000/api/reservas/solicitar/"+listaHora.value,{
+    if (window.location.hash == '#/invitado') { 
+      port = 3000
+      userId = 0
+    } else {
+      port = 3001
+      userId = window.sessionStorage.getItem(userId);
+      token = window.sessionStorage.getItem(token);
+    }
+    const request = fetch(`http://localhost:${port}/api/reservas/solicitar/`+listaHora.value,{
         method: "POST",
-        headers: {'Accept': 'application/json',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token,
        // 'Content-type': 'text/html'
       },body:JSON.stringify({
-        "userId" : 0,
+        "userId" : userId,
       })
       }
     

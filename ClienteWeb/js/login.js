@@ -1,4 +1,16 @@
-/*<div class="">
+function Hash(email) {
+    var hash = 0;
+    if (email.length == 0) return hash;
+    for (i = 0; i < email.length; i++) {
+        char = email.charCodeAt(i);
+        hash = ((hash<<5)-hash)+char;
+        hash = hash & hash; // Lo convierte a un entero de 32 bit 
+    }
+    return (hash<0)?hash*-1:hash;
+}
+
+
+/* <div class="">
           <button id="login" class="btn btn-primary center-block">Registrarse/Loggearte</button>
           <button id="logout" class="btn btn-primary">Invitado</button>
         </div>*/
@@ -21,23 +33,20 @@ auth0
       console.log(window.location.origin);
       //console.log(authorizationParams.redirect_uri);
       //throw Error();
-      auth0Client.loginWithRedirect().then(token => {console.log(token)
-        console.log("viva yo")});
+      auth0Client.loginWithRedirect().then(token => {console.log(token)});
     });
 
     if (location.search.includes("state=") &&
       (location.search.includes("code=") ||
         location.search.includes("error="))) {
       auth0Client.handleRedirectCallback().then((token) => {
-        console.log("LA SCALONETA")
         auth0Client.getIdTokenClaims().then(sessionData => {
-          console.log("MESSI PRESIDENTE")
           console.log(token)
           console.log(sessionData)
           if (sessionData) {
             window.sessionStorage.setItem('token', sessionData.__raw)
             window.sessionStorage.setItem('email', sessionData.email)
-            //window.sessionStorage.setItem('userId',generateUserId(sessionData.email))
+            window.sessionStorage.setItem('userId', Hash(sessionData.email))
           }
           window.history.replaceState({}, document.title, "/");
           window.location.href = "/";
