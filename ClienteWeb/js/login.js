@@ -1,7 +1,4 @@
-/*<div class="">
-          <button id="login" class="btn btn-primary center-block">Registrarse/Loggearte</button>
-          <button id="logout" class="btn btn-primary">Invitado</button>
-        </div>*/
+// #/logeado 
 auth0
   .createAuth0Client({
     //responseType: "code",
@@ -9,7 +6,7 @@ auth0
     domain: "dev-pn7zgl7ckp8stzea.us.auth0.com",
     clientId: "KMWqrOft0FpDJNmnzYriye6rOAQpXqQ9",
     authorizationParams: {
-      redirect_uri: window.location.origin + '/registro.html',
+      redirect_uri: window.location.origin + '/#/logeado',
     },
   })
   .then(async (auth0Client) => {
@@ -19,8 +16,6 @@ auth0
     loginButton.addEventListener("click", (e) => {
       e.preventDefault();
       console.log(window.location.origin);
-      //console.log(authorizationParams.redirect_uri);
-      //throw Error();
       auth0Client.loginWithRedirect().then(token => {console.log(token)
         console.log("viva yo")});
     });
@@ -41,6 +36,7 @@ auth0
           }
           window.history.replaceState({}, document.title, "/");
           window.location.href = "/";
+         
         });
       });
     }
@@ -58,7 +54,7 @@ auth0
     const userProfile = await auth0Client.getUser();
 
     // Assumes an element with id "profile" in the DOM
-    const profileElement = document.getElementById("profile");
+    //const profileElement = document.getElementById("profile");
     /*
     if (isAuthenticated) {
       profileElement.style.display = "block";

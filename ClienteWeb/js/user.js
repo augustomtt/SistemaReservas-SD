@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded',function(e){
   var btnConfirm = document.getElementById("btn-confirm");
   var btnSolicitar = document.getElementById("btn-solicitar");
   var mapa = document.getElementById("map");
-  var mapId = "55f6ea4a-159d-4905-96ef-ff1d3ce1798d";
+  //var mapId = "55f6ea4a-159d-4905-96ef-ff1d3ce1798d";
   var sucursal = document.getElementById("sucursales");
   var listaDia = document.getElementById("lista_dias");
   var listaHora = document.getElementById("lista_horas");
@@ -169,8 +169,8 @@ document.addEventListener('DOMContentLoaded',function(e){
         data.forEach(element => {   let option  = document.createElement('option')
         option.value = element.id;
         let dia =  new Date(element.dateTime);
-        let hora = dia.getUTCHours();
-        let minutos = dia.getUTCMinutes();
+        let hora = dia.getHours();
+        let minutos = dia.getMinutes();
         if(minutos<10)
         minutos+="0"
         option.text = hora+ ":" + minutos;
