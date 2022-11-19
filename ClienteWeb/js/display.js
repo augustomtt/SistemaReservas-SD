@@ -1,5 +1,4 @@
-document.addEventListener('DOMContentLoaded',function(e){
-    e.preventDefault();
+
 var botonInvitado = document.getElementById('pagina-invitado');
 var logeo  = document.getElementById('logeo');
 var formulario = document.getElementById('main-form');
@@ -10,19 +9,26 @@ var botonLogout = document.getElementById('logout');
 var misReservas = document.getElementById('mis-reservas');
 var botonInicio = document.getElementById('boton-inicio');
 
-botonInvitado.addEventListener('click',() =>{
-    console.log(window.location.hash);
-logeo.style.display = 'none';
+function invitado(){
+    logeo.style.display = 'none';
 navegacion.style.display = 'block';
 formulario.style.display = 'block';
-});
+}
 
-botonLogin.addEventListener('click',()=>{
-    console.log(window.location.hash);
+function logeado(){
     logeo.style.display = 'none';
-    navegacion.style.display = 'block'
-    formulario.style.display = 'block'
-    misReservas.style.display = 'block'
+    navegacion.style.display = 'block';
+    formulario.style.display = 'block';
+    misReservas.style.display = 'block';
+}
+if(window.location.hash == "#/invitado"){
+        invitado();
+}
+if(window.location.hash == "#/logeado"){
+        logeado();
+}
+botonInvitado.addEventListener('click',() =>{
+    invitado();
 });
 
 botonLogout.addEventListener('click',() =>{
@@ -31,7 +37,19 @@ botonLogout.addEventListener('click',() =>{
     formulario.style.display = 'none';
     misReservas.style.display = 'none'
 });
+
+misReservas.addEventListener('click',()=>{
+    
 });
 
-// <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
-//script src="/js/login.js"></script>    
+botonInicio.addEventListener('click',()=>{
+
+    botonInicio.href = window.location.hash;
+    
+});
+
+
+
+
+
+  

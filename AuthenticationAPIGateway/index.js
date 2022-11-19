@@ -1,4 +1,5 @@
 const { bodyParser } = require("./bodyParser");
+const config = require('./config.json');
 const { application } = require('express');
 const express = require('express');
 const app = express();

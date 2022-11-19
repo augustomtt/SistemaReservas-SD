@@ -21,7 +21,7 @@ auth0
     domain: "dev-pn7zgl7ckp8stzea.us.auth0.com",
     clientId: "KMWqrOft0FpDJNmnzYriye6rOAQpXqQ9",
     authorizationParams: {
-      redirect_uri: window.location.origin + '/registro.html',
+      redirect_uri: window.location.origin + '#/logeado',
     },
   })
   .then(async (auth0Client) => {
@@ -31,9 +31,8 @@ auth0
     loginButton.addEventListener("click", (e) => {
       e.preventDefault();
       console.log(window.location.origin);
-      //console.log(authorizationParams.redirect_uri);
-      //throw Error();
-      auth0Client.loginWithRedirect().then(token => {console.log(token)});
+      auth0Client.loginWithRedirect().then(token => {console.log(token)
+        });
     });
 
     if (location.search.includes("state=") &&
@@ -49,7 +48,8 @@ auth0
             window.sessionStorage.setItem('userId', Hash(sessionData.email))
           }
           window.history.replaceState({}, document.title, "/");
-          window.location.href = "/";
+          window.location.href = "#/logeado";
+         
         });
       });
     }
@@ -67,7 +67,7 @@ auth0
     const userProfile = await auth0Client.getUser();
 
     // Assumes an element with id "profile" in the DOM
-    const profileElement = document.getElementById("profile");
+    //const profileElement = document.getElementById("profile");
     /*
     if (isAuthenticated) {
       profileElement.style.display = "block";
