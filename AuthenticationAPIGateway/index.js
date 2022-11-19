@@ -1,3 +1,6 @@
+const { bodyParser } = require("./bodyParser");
+const config = require('./config.json');
+const { application } = require('express');
 const express = require('express');
 const app = express();
 const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
@@ -21,6 +24,53 @@ app.get('/*', checkJwt, function(req, res) {
   res.json({
     message: 'Hello from a private endpoint! You need to be authenticated to see this.'
   });
+});*/
+
+app.post('/api/reservas',checkJwt,function (req,res) {
+  bodyParser(req)
+          .then(() => {
+
+            const options = {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+            };
+
+            const request = http.request("http://localhost:"+ config.puertoReservas + url, options, function (response) {
+              let body = ''
+
+              response.on('data', (chunk) => {
+                body += chunk;
+              });
+
+              response.on('end', () => {
+                res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
+                body = JSON.parse(body);
+                res.write(JSON.stringify(body));
+                res.end();
+              });
+
+              response.on('close', () => {
+                console.log('Connection closed with Reservas');
+              });
+            });
+            if(parametros[2] == "solicitar"){
+              request.write(JSON.stringify({
+              
+                "userId": req.body.userId
+              }));
+            }
+            if(parametros[2] == "confirmar"){
+              request.write(JSON.stringify({
+                "email": req.body.email,
+                "userId": req.body.userId
+              }));
+            }
+            
+            request.end();
+          })
+          .catch(error => console.error(error));
 });
 
 app.listen(port);
