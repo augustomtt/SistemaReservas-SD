@@ -4,6 +4,8 @@ const { application } = require('express');
 const express = require('express');
 const app = express();
 const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
+const http = require('http')
+const path = require('url');
 
 const cors = require('cors');
 app.use(cors({
@@ -32,6 +34,8 @@ app.get('/*', checkJwt, function(req, res) {
 });*/
 
 app.post('/api/reservas/*', checkJwt, function (req, res) {
+  const { url, method } = req;
+  let parametros = url.split("/");
   bodyParser(req)
           .then(() => {
 
@@ -61,7 +65,6 @@ app.post('/api/reservas/*', checkJwt, function (req, res) {
             });
             if(parametros[2] == "solicitar"){
               request.write(JSON.stringify({
-              
                 "userId": req.body.userId
               }));
             }
