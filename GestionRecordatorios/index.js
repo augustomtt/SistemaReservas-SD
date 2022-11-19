@@ -1,7 +1,8 @@
 const http = require('http');
+const config = require('./config.json');
 
 function main () {
-  http.get('http://localhost:8000/api/reservas/', (res) => {
+  http.get("http://localhost:"+config.puertoReserva+"/api/reservas", (res) => {
     let body = '';
     console.log(`statusCode: ${res.statusCode}`);
 
@@ -12,8 +13,8 @@ function main () {
     res.on('end', () => {
       const reservas = JSON.parse(body);
       reservas.forEach((reserva) => {
-        const time = new Date(reserva.datetime);
-        if (isSameDate(time)) {
+        const time = new Date(reserva.dateTime);
+        if (isSameDate(time) && reserva.status == 2){
 
           console.log('Enviando recordatorio', reserva);
           let postData = {
@@ -24,7 +25,7 @@ function main () {
 
           const options = {
             hostname: 'localhost',
-            port: 8080,
+            port: config.puertoNotificacion,
             path: '/api/notificacion',
             method: 'POST',
             headers: {
