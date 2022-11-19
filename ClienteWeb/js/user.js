@@ -1,4 +1,6 @@
-document.addEventListener('DOMContentLoaded',function(e){
+
+
+document.addEventListener('DOMContentLoaded', function (e) {
   e.preventDefault();
   var btnConfirm = document.getElementById("btn-confirm");
   var btnSolicitar = document.getElementById("btn-solicitar");
@@ -10,6 +12,11 @@ document.addEventListener('DOMContentLoaded',function(e){
   var email = document.getElementById("email");
   var datos = document.getElementById("datos");
   var timer;
+  var port;
+  var userId;
+  var token;
+  var header;
+
   
 
 
@@ -18,21 +25,37 @@ document.addEventListener('DOMContentLoaded',function(e){
     // chequear que no esten los campos vacios.
     
     // llamar a verifica turno, y bloquear recurso
-    const request = fetch("http://localhost:3000/api/reservas/solicitar/"+listaHora.value,{
-        method: "POST",
-        headers: {'Accept': 'application/json',
-       // 'Content-type': 'text/html'
-      },body:JSON.stringify({
-        "userId" : 0,
+    if (window.location.hash == '#/invitado') { 
+      port = 3000
+      userId = 0
+      header = {
+        'Accept': 'application/json',
+      };
+    } else {
+      port = 3001
+      userId = window.sessionStorage.getItem('userId');
+      token = window.sessionStorage.getItem('token');
+      email.value = window.sessionStorage.getItem('email');
+      console.log("token recuperado " + token);
+      header = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      };
+    }
+    const request = fetch(`http://localhost:${port}/api/reservas/solicitar/`+listaHora.value,{
+      method: "POST",
+      headers: header,
+      body:JSON.stringify({
+        "userId" : userId,
       })
-      }
+      }   
     
     ).then(res =>{
       if(res.status == 200){
         console.log(res.status);
         datos.style.display = "block";
         btnConfirm.style.display = "block";
-        alert("Tiene dos minutos para conpletar sus datos y confirmar el turno");
+        alert("Tiene dos minutos para completar sus datos y confirmar el turno");
         
         timer  = setTimeout(function(){
 
@@ -58,17 +81,19 @@ document.addEventListener('DOMContentLoaded',function(e){
     })
     .catch( error => {alert("Hubo un problema, no se pudo solicitar la reserva");console.error(error)})
   });
+
+
+
   btnConfirm.addEventListener('click',function(e){
       e.preventDefault();
       
       //chequear que no esten los campos vacios
       
-      const request = fetch("http://localhost:3000/api/reservas/confirmar/"+listaHora.value,{
+      const request = fetch(`http://localhost:${port}/api/reservas/confirmar/`+listaHora.value,{
         method: "POST",
-        headers: {'Accept': 'application/json',
-       // 'Content-type': 'text/html'
-      },body:JSON.stringify({
-        "userId" : 0,
+        headers: header,
+        body: JSON.stringify({
+        "userId" : userId,
         "email": email.value
       })
       }

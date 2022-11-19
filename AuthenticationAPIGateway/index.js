@@ -4,40 +4,49 @@ const { application } = require('express');
 const express = require('express');
 const app = express();
 const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
+const http = require('http')
+const path = require('url');
 
-const port = 8080
+const cors = require('cors');
+app.use(cors({
+    origin: '*'
+}));
+
+const port = config.puerto;
 // Authorization middleware. When used, the Access Token must
 // exist and be verified against the Auth0 JSON Web Key Set.
 const checkJwt = auth({
-  audience: 'https://dev-pn7zgl7ckp8stzea.us.auth0.com/api/v2/',
+  audience: 'KMWqrOft0FpDJNmnzYriye6rOAQpXqQ9',
   issuerBaseURL: `https://dev-pn7zgl7ckp8stzea.us.auth0.com`,
 });
 app.use(checkJwt) 
-
+/*
 // This route needs authentication
-/*app.get('/api/auth/private', checkJwt, function(req, res) {
+app.get('/api/auth/private', checkJwt, function(req, res) {
     res.json({
       message: 'Hello from a private endpoint! You need to be authenticated to see this.'
     });
-});*/
+});
 app.get('/*', checkJwt, function(req, res) {
   res.json({
     message: 'Hello from a private endpoint! You need to be authenticated to see this.'
   });
 });*/
 
-app.post('/api/reservas',checkJwt,function (req,res) {
+app.post('/api/reservas/*', checkJwt, function (req, res) {//TODO cambiar dsp
+  let parametros = req.url.split("/");
+  console.log(parametros);
   bodyParser(req)
           .then(() => {
-
             const options = {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
-            };
 
-            const request = http.request("http://localhost:"+ config.puertoReservas + url, options, function (response) {
+            };
+        
+            const request = http.request("http://localhost:"+ config.puertoReservas + req.url, options, function (response) {
               let body = ''
 
               response.on('data', (chunk) => {
@@ -45,6 +54,7 @@ app.post('/api/reservas',checkJwt,function (req,res) {
               });
 
               response.on('end', () => {
+
                 res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
                 body = JSON.parse(body);
                 res.write(JSON.stringify(body));
@@ -55,13 +65,13 @@ app.post('/api/reservas',checkJwt,function (req,res) {
                 console.log('Connection closed with Reservas');
               });
             });
-            if(parametros[2] == "solicitar"){
+            if(parametros[3] == "solicitar"){
               request.write(JSON.stringify({
               
                 "userId": req.body.userId
               }));
             }
-            if(parametros[2] == "confirmar"){
+            if(parametros[3] == "confirmar"){
               request.write(JSON.stringify({
                 "email": req.body.email,
                 "userId": req.body.userId
@@ -71,6 +81,7 @@ app.post('/api/reservas',checkJwt,function (req,res) {
             request.end();
           })
           .catch(error => console.error(error));
+  
 });
 
 app.listen(port);
