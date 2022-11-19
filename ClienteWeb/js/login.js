@@ -6,7 +6,7 @@ auth0
     domain: "dev-pn7zgl7ckp8stzea.us.auth0.com",
     clientId: "KMWqrOft0FpDJNmnzYriye6rOAQpXqQ9",
     authorizationParams: {
-      redirect_uri: window.location.origin + '/#/logeado',
+      redirect_uri: window.location.origin + '#/logeado',
     },
   })
   .then(async (auth0Client) => {
@@ -17,16 +17,16 @@ auth0
       e.preventDefault();
       console.log(window.location.origin);
       auth0Client.loginWithRedirect().then(token => {console.log(token)
-        console.log("viva yo")});
+        });
     });
 
     if (location.search.includes("state=") &&
       (location.search.includes("code=") ||
         location.search.includes("error="))) {
       auth0Client.handleRedirectCallback().then((token) => {
-        console.log("LA SCALONETA")
+
         auth0Client.getIdTokenClaims().then(sessionData => {
-          console.log("MESSI PRESIDENTE")
+
           console.log(token)
           console.log(sessionData)
           if (sessionData) {
@@ -35,7 +35,7 @@ auth0
             //window.sessionStorage.setItem('userId',generateUserId(sessionData.email))
           }
           window.history.replaceState({}, document.title, "/");
-          window.location.href = "/";
+          window.location.href = "#/logeado";
          
         });
       });
