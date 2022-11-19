@@ -5,17 +5,22 @@ const express = require('express');
 const app = express();
 const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
 
+const cors = require('cors');
+app.use(cors({
+    origin: '*'
+}));
+
 const port = config.puerto;
 // Authorization middleware. When used, the Access Token must
 // exist and be verified against the Auth0 JSON Web Key Set.
 const checkJwt = auth({
-  audience: 'https://dev-pn7zgl7ckp8stzea.us.auth0.com/api/v2/',
+  audience: 'KMWqrOft0FpDJNmnzYriye6rOAQpXqQ9',
   issuerBaseURL: `https://dev-pn7zgl7ckp8stzea.us.auth0.com`,
 });
 app.use(checkJwt) 
-
+/*
 // This route needs authentication
-/*app.get('/api/auth/private', checkJwt, function(req, res) {
+app.get('/api/auth/private', checkJwt, function(req, res) {
     res.json({
       message: 'Hello from a private endpoint! You need to be authenticated to see this.'
     });
@@ -26,7 +31,7 @@ app.get('/*', checkJwt, function(req, res) {
   });
 });*/
 
-app.post('/api/reservas',checkJwt,function (req,res) {
+app.post('/api/reservas/*', checkJwt, function (req, res) {
   bodyParser(req)
           .then(() => {
 
@@ -36,7 +41,6 @@ app.post('/api/reservas',checkJwt,function (req,res) {
                 'Content-Type': 'application/json'
               },
             };
-
             const request = http.request("http://localhost:"+ config.puertoReservas + url, options, function (response) {
               let body = ''
 

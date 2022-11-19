@@ -29,11 +29,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
       userId = 0
     } else {
       port = 3001
-      userId = window.sessionStorage.getItem(userId);
-      token = window.sessionStorage.getItem(token);
+      userId = window.sessionStorage.getItem('userId');
+      token = window.sessionStorage.getItem('token');
+      console.log("token recuperado "+ token);
     }
     const request = fetch(`http://localhost:${port}/api/reservas/solicitar/`+listaHora.value,{
-        method: "POST",
+      method: "POST",
       headers: {
         'Accept': 'application/json',
         'Authorization': 'Bearer ' + token,
@@ -41,14 +42,14 @@ document.addEventListener('DOMContentLoaded', function (e) {
       },body:JSON.stringify({
         "userId" : userId,
       })
-      }
+      }   
     
     ).then(res =>{
       if(res.status == 200){
         console.log(res.status);
         datos.style.display = "block";
         btnConfirm.style.display = "block";
-        alert("Tiene dos minutos para conpletar sus datos y confirmar el turno");
+        alert("Tiene dos minutos para completar sus datos y confirmar el turno");
         
         timer  = setTimeout(function(){
 
