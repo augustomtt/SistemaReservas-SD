@@ -33,19 +33,20 @@ app.get('/*', checkJwt, function(req, res) {
   });
 });*/
 
-app.post('/api/reservas/*', checkJwt, function (req, res) {
-  const { url, method } = req;
-  let parametros = url.split("/");
+app.post('/api/reservas/*', checkJwt, function (req, res) {//TODO cambiar dsp
+  let parametros = req.url.split("/");
+  console.log(parametros);
   bodyParser(req)
           .then(() => {
-
             const options = {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
+
             };
-            const request = http.request("http://localhost:"+ config.puertoReservas + url, options, function (response) {
+        
+            const request = http.request("http://localhost:"+ config.puertoReservas + req.url, options, function (response) {
               let body = ''
 
               response.on('data', (chunk) => {
@@ -53,6 +54,7 @@ app.post('/api/reservas/*', checkJwt, function (req, res) {
               });
 
               response.on('end', () => {
+
                 res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
                 body = JSON.parse(body);
                 res.write(JSON.stringify(body));
@@ -63,12 +65,13 @@ app.post('/api/reservas/*', checkJwt, function (req, res) {
                 console.log('Connection closed with Reservas');
               });
             });
-            if(parametros[2] == "solicitar"){
+            if(parametros[3] == "solicitar"){
               request.write(JSON.stringify({
+              
                 "userId": req.body.userId
               }));
             }
-            if(parametros[2] == "confirmar"){
+            if(parametros[3] == "confirmar"){
               request.write(JSON.stringify({
                 "email": req.body.email,
                 "userId": req.body.userId
@@ -78,6 +81,7 @@ app.post('/api/reservas/*', checkJwt, function (req, res) {
             request.end();
           })
           .catch(error => console.error(error));
+  
 });
 
 app.listen(port);

@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
   var port;
   var userId;
   var token;
+  var header;
 
   
 
@@ -27,19 +28,24 @@ document.addEventListener('DOMContentLoaded', function (e) {
     if (window.location.hash == '#/invitado') { 
       port = 3000
       userId = 0
+      header = {
+        'Accept': 'application/json',
+      };
     } else {
       port = 3001
       userId = window.sessionStorage.getItem('userId');
       token = window.sessionStorage.getItem('token');
-      console.log("token recuperado "+ token);
+      email.value = window.sessionStorage.getItem('email');
+      console.log("token recuperado " + token);
+      header = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      };
     }
     const request = fetch(`http://localhost:${port}/api/reservas/solicitar/`+listaHora.value,{
       method: "POST",
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + token,
-       // 'Content-type': 'text/html'
-      },body:JSON.stringify({
+      headers: header,
+      body:JSON.stringify({
         "userId" : userId,
       })
       }   
@@ -75,17 +81,19 @@ document.addEventListener('DOMContentLoaded', function (e) {
     })
     .catch( error => {alert("Hubo un problema, no se pudo solicitar la reserva");console.error(error)})
   });
+
+
+
   btnConfirm.addEventListener('click',function(e){
       e.preventDefault();
       
       //chequear que no esten los campos vacios
       
-      const request = fetch("http://localhost:3000/api/reservas/confirmar/"+listaHora.value,{
+      const request = fetch(`http://localhost:${port}/api/reservas/confirmar/`+listaHora.value,{
         method: "POST",
-        headers: {'Accept': 'application/json',
-       // 'Content-type': 'text/html'
-      },body:JSON.stringify({
-        "userId" : 0,
+        headers: header,
+        body: JSON.stringify({
+        "userId" : userId,
         "email": email.value
       })
       }
