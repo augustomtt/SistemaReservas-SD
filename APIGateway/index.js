@@ -60,7 +60,6 @@ const server = http.createServer((req, res) => {
         case "POST":
          bodyParser(req)
           .then(() => {
-
             const options = {
               method: 'POST',
               headers: {
@@ -108,7 +107,7 @@ const server = http.createServer((req, res) => {
 
         case "DELETE": // baja de reserva
            
-            const options = {
+          const options = {
               method: 'DELETE',
               headers: {
                 'Content-Type': 'application/json'
