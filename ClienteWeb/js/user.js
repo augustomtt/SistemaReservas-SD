@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', function (e) {
   e.preventDefault();
   var btnConfirm = document.getElementById("btn-confirm");
@@ -20,10 +18,13 @@ document.addEventListener('DOMContentLoaded', function (e) {
   var token;
   var header;
 
-  /*
+  
   misReservas.addEventListener('click',function(e){
   e.preventDefault();
   //mostrar reservas
+  let options = listaReservas.querySelectorAll('option')
+  options.forEach(o => o.remove());
+  console.log(window.sessionStorage.getItem('userId'))
   const request = fetch("http://localhost:3000/api/reservas?userId="+window.sessionStorage.getItem('userId'),{
         method: "GET",
         headers: {'Accept': 'application/json',
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
   })
   .then(res =>{
-    if(res.status!=200) throw  Error(res.msg);
+    if(res.status!=200) throw  Error();
 
     return res;
   })
@@ -47,13 +48,13 @@ document.addEventListener('DOMContentLoaded', function (e) {
       let minutos = dia.getMinutes();
       if(minutos<10)
       minutos+="0";
-      option.text(`${fecha[0]} ---- ${hora}:${minutos}`);
+      option.text = `${fecha[0]} ---- ${hora}:${minutos}`;
       listaReservas.append(option)
     })
   })
   .catch(error =>{alert("Error en la carga de reservas");console.error(error)});
 
-  });*/
+  });
 
   btnSolicitar.addEventListener('click',function(e){
     e.preventDefault();
@@ -92,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         datos.style.display = "block";
         btnConfirm.style.display = "block";
         alert("Tiene dos minutos para completar sus datos y confirmar el turno");
-        
+        /*
         timer  = setTimeout(function(){
 
           alert("Se termino el tiempo para confirmar la reserva");
@@ -112,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           })
           .catch((error) => console.error(error));
           location.reload();
-        },120000);
+        },120000);*/
       }
       else
         alert("Hubo un problema, no se pudo solicitar la reserva")
@@ -139,13 +140,16 @@ document.addEventListener('DOMContentLoaded', function (e) {
     ).then(res =>{
       if(res.status == 200){
         alert("Turno confirmado correctamente");
-        clearTimeout(timer); // elimino el timeout
+        //clearTimeout(timer); // elimino el timeout
         location.reload();
       }
-      else
-        alert("Hubo un problema, no se confirmo la reserva")
+      else{
+        alert("No se pudo confirmar ya que paso el tiempo");
+        location.reload();
+      }
+       
     })
-    .catch( error => {alert("Hubo un problema, no se pudo solicitar la reserva");console.error(error)});
+    .catch( error => {alert("Hubo un problema, no se pudo confirmar la reserva");console.error(error)});
   });
 
 
@@ -184,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
     }
     )
     .then(res =>{
-      if(res.status!=200) throw  Error(res.msg);
+      if(res.status!=200) throw  Error();
 
       return res;
     })
@@ -225,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
     }
     )
     .then(res =>{
-      if(res.status!=200) throw  Error(res.msg);
+      if(res.status!=200) throw  Error();
 
       return res;
     })

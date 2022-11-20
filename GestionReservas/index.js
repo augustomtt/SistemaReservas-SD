@@ -194,6 +194,26 @@ function verificaTurno(req,res,idReserva) { // cambio status de 0 a 1, y pongo u
         res.writeHead(200, { 'Content-Type': 'application/json' });
         respuesta.msg = "Turno Verificado correctamente";
         res.write(JSON.stringify(respuesta));
+
+        //hacer un timeout
+       
+        let timeout = setTimeout(()=>{
+          let resultado = 0;
+            let reserva = reservas.find(r => r.id == idReserva);
+            if(reserva.status!=2){
+              reserva.status = 0;
+              reserva.userId = -1;
+              resultado = 1;
+            }
+            if(resultado){ // guardo resultado
+              console.log("Perdiste el turno");
+              fs.writeFile('reservas.json', JSON.stringify(reservas), 'utf8', (err) => {
+                if (err) throw err;
+              });
+            }
+        },120000);
+
+        
       }
       else{
         res.writeHead(404, { 'Content-Type': 'application/json' });//verificar este caso, creo que no es asi
