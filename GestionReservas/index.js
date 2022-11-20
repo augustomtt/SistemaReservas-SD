@@ -69,35 +69,40 @@ function getReserva(res, idReserva) {
   res.end();
 }
 
-function bajaReserva(res, idReserva) { 
+function bajaReserva(req,res, idReserva) { 
 
-  let reserva = reservas.find(r => r.id == idReserva);
+  
   let respuesta = {
     msg: ""
   }
-  if (reserva != undefined){
-    if(reserva.email!=null && reserva.userId!=-1 && reserva.status != 0){
-      reserva.email = null;
-      reserva.userId = -1;
-      reserva.status = 0;
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      respuesta.msg = "Turno eliminado correctamente";
-      fs.writeFile('reservas.json', JSON.stringify(reservas), 'utf8', (err) => {
-        if (err) throw err;
-      });
-    }
-    else{
+  bodyParser(req)
+  .then(()=>{
+    let reserva = reservas.find(r => r.id == idReserva);
+    if (reserva != undefined){
+      if(reserva.userId == req.body.userId && reserva.status != 0){
+        reserva.email = null;
+        reserva.userId = -1;
+        reserva.status = 0;
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        respuesta.msg = "Turno eliminado correctamente";
+        fs.writeFile('reservas.json', JSON.stringify(reservas), 'utf8', (err) => {
+          if (err) throw err;
+        });
+      }
+      else{
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        respuesta.msg = "La reserva no esta asociada a ningun usuario";
+      }
+  
+     
+    } else {
       res.writeHead(404, { 'Content-Type': 'application/json' });
-      respuesta.msg = "La reserva no esta asociada a ningun usuario";
+      respuesta.msg = "No se encuentra ninguna reserva con ese id";
     }
-
-   
-  } else {
-    res.writeHead(404, { 'Content-Type': 'application/json' });
-    respuesta.msg = "No se encuentra ninguna reserva con ese id";
-  }
-  res.write(JSON.stringify(respuesta));
-  res.end()
+    res.write(JSON.stringify(respuesta));
+    res.end()
+  })
+  .catch(error => console.error(error));
 }
 
 function altaReserva(req, res, idReserva) { 
@@ -240,7 +245,7 @@ const server = http.createServer((req, res) => {
           verificaTurno(req,res,parametros[3]);
         break;
       case "DELETE":
-        bajaReserva(res, parametros[2])
+        bajaReserva(req,res, parametros[2])
         break;
     }
   }

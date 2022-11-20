@@ -1,3 +1,4 @@
 {
-    "puertoGateway" : 3000
+    "puertoGateway" : 3000,
+    "puertoGatewayAutenticacion": 3001
 }

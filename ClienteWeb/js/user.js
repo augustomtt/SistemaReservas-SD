@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
   e.preventDefault();
   var btnConfirm = document.getElementById("btn-confirm");
   var btnSolicitar = document.getElementById("btn-solicitar");
+  var btnBaja = document.getElementById("btn-baja");
   var misReservas = document.getElementById('mis-reservas');
   var mapa = document.getElementById("map");
   //var mapId = "55f6ea4a-159d-4905-96ef-ff1d3ce1798d";
@@ -101,7 +102,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
           fetch("http://localhost:3000/api/reservas/"+listaHora.value,{
             method: "DELETE",
             headers: {'Accept': 'application/json',       
-            }
+            }, body: JSON.stringify({
+              "userId" : userId,
+            })
           })
           .then(res => {
             if(res.status!=200)
@@ -143,6 +146,11 @@ document.addEventListener('DOMContentLoaded', function (e) {
         alert("Hubo un problema, no se confirmo la reserva")
     })
     .catch( error => {alert("Hubo un problema, no se pudo solicitar la reserva");console.error(error)});
+  });
+
+
+  btnBaja.addEventListener('click',function(e){
+    e.preventDefault();
   });
 
   sucursal.addEventListener('change',function(e){

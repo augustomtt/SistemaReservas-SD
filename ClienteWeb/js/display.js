@@ -11,18 +11,20 @@ var botonInicio = document.getElementById('boton-inicio');
 var reservas = document.getElementById('reservas');
 
 function invitado(){
+    reservas.style.display = 'none';
     logeo.style.display = 'none';
 navegacion.style.display = 'block';
 formulario.style.display = 'block';
-reservas.style.display = 'none';
+
 }
 
 function logeado(){
+    reservas.style.display = 'none';
     logeo.style.display = 'none';
     navegacion.style.display = 'block';
     formulario.style.display = 'block';
     misReservas.style.display = 'block';
-    reservas.style.display = 'none';
+  
 }
 function mostrarReservas(){
     logeo.style.display = 'none';
