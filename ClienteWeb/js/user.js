@@ -4,11 +4,13 @@ document.addEventListener('DOMContentLoaded', function (e) {
   e.preventDefault();
   var btnConfirm = document.getElementById("btn-confirm");
   var btnSolicitar = document.getElementById("btn-solicitar");
+  var misReservas = document.getElementById('mis-reservas');
   var mapa = document.getElementById("map");
   //var mapId = "55f6ea4a-159d-4905-96ef-ff1d3ce1798d";
   var sucursal = document.getElementById("sucursales");
   var listaDia = document.getElementById("lista_dias");
   var listaHora = document.getElementById("lista_horas");
+  var listaReservas = document.getElementById("lista_reservas");
   var email = document.getElementById("email");
   var datos = document.getElementById("datos");
   var timer;
@@ -17,8 +19,40 @@ document.addEventListener('DOMContentLoaded', function (e) {
   var token;
   var header;
 
-  
+  /*
+  misReservas.addEventListener('click',function(e){
+  e.preventDefault();
+  //mostrar reservas
+  const request = fetch("http://localhost:3000/api/reservas?userId="+window.sessionStorage.getItem('userId'),{
+        method: "GET",
+        headers: {'Accept': 'application/json',
+      // 'Access-Control-Allow-Origin': '*'    	
+      }
 
+  })
+  .then(res =>{
+    if(res.status!=200) throw  Error(res.msg);
+
+    return res;
+  })
+  .then(res =>res.json())
+  .then(data =>{
+    data.forEach(element => {
+      let option  = document.createElement('option');
+      option.value = element.id;
+      let fecha = (element.dateTime).split("T");
+      let dia =  new Date(element.dateTime);
+      let hora = dia.getHours();
+      let minutos = dia.getMinutes();
+      if(minutos<10)
+      minutos+="0";
+      option.text(`${fecha[0]} ---- ${hora}:${minutos}`);
+      listaReservas.append(option)
+    })
+  })
+  .catch(error =>{alert("Error en la carga de reservas");console.error(error)});
+
+  });*/
 
   btnSolicitar.addEventListener('click',function(e){
     e.preventDefault();
@@ -36,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       userId = window.sessionStorage.getItem('userId');
       token = window.sessionStorage.getItem('token');
       email.value = window.sessionStorage.getItem('email');
+      email.setAttribute("readonly",""); // para que no se pueda cambiar
       console.log("token recuperado " + token);
       header = {
         'Accept': 'application/json',

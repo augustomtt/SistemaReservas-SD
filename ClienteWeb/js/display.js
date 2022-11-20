@@ -8,11 +8,13 @@ var botonLogin = document.getElementById('login');
 var botonLogout = document.getElementById('logout');
 var misReservas = document.getElementById('mis-reservas');
 var botonInicio = document.getElementById('boton-inicio');
+var reservas = document.getElementById('reservas');
 
 function invitado(){
     logeo.style.display = 'none';
 navegacion.style.display = 'block';
 formulario.style.display = 'block';
+reservas.style.display = 'none';
 }
 
 function logeado(){
@@ -20,13 +22,37 @@ function logeado(){
     navegacion.style.display = 'block';
     formulario.style.display = 'block';
     misReservas.style.display = 'block';
+    reservas.style.display = 'none';
 }
+function mostrarReservas(){
+    logeo.style.display = 'none';
+    navegacion.style.display = 'block';
+    formulario.style.display = 'none';
+    misReservas.style.display = 'block';
+    reservas.style.display = 'block';
+}
+
+window.addEventListener('hashchange',()=>{
+    if(window.location.hash == "#/invitado"){
+        invitado();
+    }
+    if(window.location.hash == "#/logeado"){
+        logeado();
+    }
+    if(window.location.hash == "#/reservas"){
+    mostrarReservas();
+    }
+});
+
 if(window.location.hash == "#/invitado"){
         invitado();
 }
 if(window.location.hash == "#/logeado"){
         logeado();
 }
+if(window.location.hash == "#/reservas"){
+    mostrarReservas();
+    }
 botonInvitado.addEventListener('click',() =>{
     invitado();
 });
@@ -39,13 +65,16 @@ botonLogout.addEventListener('click',() =>{
 });
 
 misReservas.addEventListener('click',()=>{
-    
+    mostrarReservas();
 });
 
 botonInicio.addEventListener('click',()=>{
-
-    botonInicio.href = window.location.hash;
-    
+    if(window.location.hash == "#/reservas"){
+        botonInicio.href = "#/logeado";
+    }
+    else{
+        botonInicio.href = window.location.hash;
+    }
 });
 
 

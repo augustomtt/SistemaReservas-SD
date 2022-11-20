@@ -13,12 +13,12 @@
     <header>
       <div style="display: none;" id="navegacion">
           <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="">Reservas</a>
+            <a class="navbar-brand" >Reservas</a>
           
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-collapse" >
               <div class="navbar-nav">
                 <a id="boton-inicio" class="nav-item nav-link active" href="">Inicio <span class="sr-only">(current)</span></a>
-                <a id="mis-reservas" style="display: none;" class="nav-item nav-link" href="#/logeado">Mis Reservas</a>
+                <a id="mis-reservas" style="display: none;" class="nav-item nav-link" href="#/reservas">Mis Reservas</a>
                 <a class="nav-item nav-link" id="logout" href="#">LogOut</a>
               </div>
             </div>
@@ -39,6 +39,27 @@
               </li>
             </ul>
       </div>
+
+      <div style="display: none;" id="reservas">
+            <h1 class="text-center">Mis Reservas</h1> 
+          <div class="mt-5 row justify-content-center">
+                 <form action="">
+                  <div class="pt-3 form-group">
+                      <label for="lista_reservas">Reservas</label>
+                      <select name="lista_reservas" id="lista_reservas">
+                      
+                      </select>
+                    </div>
+                      <button id="btn-baja" class="btn btn-primary">Baja</button>
+                    </form>
+               
+        
+           </div>
+      
+      </div>
+
+
+
       <div style="display: none;" id="main-form">
               <h1 class="text-center">Reservas</h1>
               <div class="mt-5 row justify-content-center">
@@ -94,7 +115,7 @@
                                     <input id="email" type="text" />
                                   </div>
                           </fieldset>
-                      <button  style="display: none;" type="submit" class="m-3 btn btn-primary" id="btn-confirm">Confirmar</button>
+                      <button  style="display: none;"  class="m-3 btn btn-primary" id="btn-confirm">Confirmar</button>
                   
                     </form>
                     
