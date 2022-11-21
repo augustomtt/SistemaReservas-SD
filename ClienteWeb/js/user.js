@@ -19,40 +19,14 @@ document.addEventListener('DOMContentLoaded', function (e) {
   var header;
 
   
+  // faltaria cambiar el puerto aca
   misReservas.addEventListener('click',function(e){
   e.preventDefault();
+  window.location.hash = "#/reservas";
   //mostrar reservas
-  let options = listaReservas.querySelectorAll('option')
-  options.forEach(o => o.remove());
-  console.log(window.sessionStorage.getItem('userId'))
-  const request = fetch("http://localhost:3000/api/reservas?userId="+window.sessionStorage.getItem('userId'),{
-        method: "GET",
-        headers: {'Accept': 'application/json',
-      // 'Access-Control-Allow-Origin': '*'    	
-      }
-
-  })
-  .then(res =>{
-    if(res.status!=200) throw  Error();
-
-    return res;
-  })
-  .then(res =>res.json())
-  .then(data =>{
-    data.forEach(element => {
-      let option  = document.createElement('option');
-      option.value = element.id;
-      let fecha = (element.dateTime).split("T");
-      let dia =  new Date(element.dateTime);
-      let hora = dia.getHours();
-      let minutos = dia.getMinutes();
-      if(minutos<10)
-      minutos+="0";
-      option.text = `${fecha[0]} ---- ${hora}:${minutos}`;
-      listaReservas.append(option)
-    })
-  })
-  .catch(error =>{alert("Error en la carga de reservas");console.error(error)});
+  
+    cargarReservas();
+  
 
   });
 
@@ -152,9 +126,32 @@ document.addEventListener('DOMContentLoaded', function (e) {
     .catch( error => {alert("Hubo un problema, no se pudo confirmar la reserva");console.error(error)});
   });
 
-
+// falta cambiar el puerto.
   btnBaja.addEventListener('click',function(e){
+
     e.preventDefault();
+    let idReserva = listaReservas.value;
+    if(idReserva!=''){
+      const request =  fetch("http://localhost:3000/api/reservas/"+idReserva,{
+        method: "DELETE",
+        headers: {'Accept': 'application/json',       
+        }, body: JSON.stringify({
+          "userId" : userId,
+        })
+      })
+      .then(res => {
+        if(res.status!=200)
+            alert("Error en la baja de la reserva");
+        else{
+          alert("Reserva dada de baja con exito");
+          location.reload();
+        }
+      })
+      .catch((error) => console.error(error));
+    }
+    else{
+      alert("No hay ninguna reserva seleccionada");
+    }
   });
 
   sucursal.addEventListener('change',function(e){
@@ -254,6 +251,39 @@ document.addEventListener('DOMContentLoaded', function (e) {
   .catch(error => console.error(error));
   }
   
+  function cargarReservas(){
+    
+    let options = listaReservas.querySelectorAll('option')
+  options.forEach(o => o.remove());
+    const request = fetch("http://localhost:3000/api/reservas?userId="+window.sessionStorage.getItem('userId'),{
+        method: "GET",
+        headers: {'Accept': 'application/json',
+      // 'Access-Control-Allow-Origin': '*'    	
+      }
+
+  })
+  .then(res =>{
+    if(res.status!=200) throw  Error();
+
+    return res;
+  })
+  .then(res =>res.json())
+  .then(data =>{
+    data.forEach(element => {
+      let option  = document.createElement('option');
+      option.value = element.id;
+      let fecha = (element.dateTime).split("T");
+      let dia =  new Date(element.dateTime);
+      let hora = dia.getHours();
+      let minutos = dia.getMinutes();
+      if(minutos<10)
+      minutos+="0";
+      option.text = `${fecha[0]} ---- ${hora}:${minutos}`;
+      listaReservas.append(option)
+    })
+  })
+  .catch(error =>{alert("Error en la carga de reservas");console.error(error)});
+  }
  
   function cargarSucursales(mapId){
     
@@ -308,6 +338,14 @@ document.addEventListener('DOMContentLoaded', function (e) {
         }
       
       ).then(res =>res.json())
-      .then(data => {mapa.src = "https://app.cartes.io/maps/"+data.uuid+"/embed?type=map&lat=-37.998768161736486&lng=-57.52020835876465&zoom=12"; cargarSucursales(data.uuid)} );
+      .then(data => {mapa.src = "https://app.cartes.io/maps/"+data.uuid+"/embed?type=map&lat=-37.998768161736486&lng=-57.52020835876465&zoom=12"; cargarSucursales(data.uuid)} )
+      .catch(error => console.error(error));
+
+
+      if(window.location.hash == "#/reservas"){
+         cargarReservas();
+      }
+
+
 });
 
