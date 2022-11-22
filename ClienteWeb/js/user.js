@@ -18,6 +18,24 @@ document.addEventListener('DOMContentLoaded', function (e) {
   var token;
   var header;
 
+  if (window.location.hash == '#/invitado') { 
+    port = 3000
+    userId = 0
+    header = {
+      'Accept': 'application/json',
+    };
+  } else {
+    port = 3001
+    userId = window.sessionStorage.getItem('userId');
+    token = window.sessionStorage.getItem('token');
+    email.value = window.sessionStorage.getItem('email');
+    email.setAttribute("readonly",""); // para que no se pueda cambiar
+    console.log("token recuperado " + token);
+    header = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    };
+  }
   
   // faltaria cambiar el puerto aca
   misReservas.addEventListener('click',function(e){
@@ -32,24 +50,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
     // chequear que no esten los campos vacios.
     
     // llamar a verifica turno, y bloquear recurso
-    if (window.location.hash == '#/invitado') { 
-      port = 3000
-      userId = 0
-      header = {
-        'Accept': 'application/json',
-      };
-    } else {
-      port = 3001
-      userId = window.sessionStorage.getItem('userId');
-      token = window.sessionStorage.getItem('token');
-      email.value = window.sessionStorage.getItem('email');
-      email.setAttribute("readonly",""); // para que no se pueda cambiar
-      console.log("token recuperado " + token);
-      header = {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + token,
-      };
-    }
+    
     const request = fetch(`http://localhost:${port}/api/reservas/solicitar/`+listaHora.value,{
       method: "POST",
       headers: header,
@@ -130,11 +131,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
     if(idReserva!=''){
       let opcion = confirm("Seguro que desea dar de baja?");
         if(opcion){
-       fetch("http://localhost:3000/api/reservas/"+idReserva,{
+       fetch(`http://localhost:${port}/api/reservas/`+idReserva,{
           method: "DELETE",
-          headers: {'Accept': 'application/json',
-          'Authorization': 'Bearer ' + token,
-          }, body: JSON.stringify({
+          headers: header,
+          body: JSON.stringify({
             "userId" : userId
           })
         })
@@ -179,11 +179,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
   });
 
   function cargarDias(idSucursal){
-    const request = fetch("http://localhost:3000/api/reservas?branchId="+idSucursal+"&userId=-1",{
+    const request = fetch(`http://localhost:${port}/api/reservas?branchId=`+idSucursal+"&userId=-1",{
       method: "GET",
-      headers: {'Accept': 'application/json',
-    // 'Access-Control-Allow-Origin': '*'    	
-    }
+      headers: header
     }
     )
     .then(res =>{
@@ -220,11 +218,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
   }
 
   function cargarHora(idSucursal,dia){
-    const request = fetch("http://localhost:3000/api/reservas?branchId="+idSucursal+"&dateTime="+dia+"&userId=-1",{
+    const request = fetch(`http://localhost:${port}/api/reservas?branchId=`+idSucursal+"&dateTime="+dia+"&userId=-1",{
       method: "GET",
-      headers: {'Accept': 'application/json',
-    // 'Access-Control-Allow-Origin': '*'    	
-    }
+      headers: header
     }
     )
     .then(res =>{
@@ -257,11 +253,9 @@ document.addEventListener('DOMContentLoaded', function (e) {
     
     let options = listaReservas.querySelectorAll('option')
   options.forEach(o => o.remove());
-    const request = fetch("http://localhost:3000/api/reservas?userId="+window.sessionStorage.getItem('userId'),{
+    const request = fetch(`http://localhost:${port}/api/reservas?userId=`+window.sessionStorage.getItem('userId'),{
         method: "GET",
-        headers: {'Accept': 'application/json',
-      // 'Access-Control-Allow-Origin': '*'    	
-      }
+        headers: header
 
   })
   .then(res =>{
@@ -289,11 +283,11 @@ document.addEventListener('DOMContentLoaded', function (e) {
  
   function cargarSucursales(mapId){
     
-    const request = fetch("http://localhost:3000/api/sucursales",{
+    const request = fetch(`http://localhost:${port}/api/sucursales`,{
       method: "GET",
-      headers: {'Accept': 'application/json',
+      headers: header,
     // 'Access-Control-Allow-Origin': '*'    	
-    }
+    
     }
     ).then(res =>res.json())
     .then(data => {
