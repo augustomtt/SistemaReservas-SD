@@ -1,87 +1,220 @@
 const { bodyParser } = require("./bodyParser");
-const config = require('./config.json');
-const { application } = require('express');
-const express = require('express');
+const config = require("./config.json");
+const { application } = require("express");
+const express = require("express");
 const app = express();
-const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
-const http = require('http')
-const path = require('url');
+const { auth, requiredScopes } = require("express-oauth2-jwt-bearer");
+const http = require("http");
+const path = require("url");
 
-const cors = require('cors');
-app.use(cors({
-    origin: '*'
-}));
+
+const cors = require("cors");
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 const port = config.puerto;
-// Authorization middleware. When used, the Access Token must
-// exist and be verified against the Auth0 JSON Web Key Set.
 const checkJwt = auth({
-  audience: 'KMWqrOft0FpDJNmnzYriye6rOAQpXqQ9',
+  audience: "KMWqrOft0FpDJNmnzYriye6rOAQpXqQ9",
   issuerBaseURL: `https://dev-pn7zgl7ckp8stzea.us.auth0.com`,
 });
-app.use(checkJwt) 
-/*
-// This route needs authentication
-app.get('/api/auth/private', checkJwt, function(req, res) {
-    res.json({
-      message: 'Hello from a private endpoint! You need to be authenticated to see this.'
-    });
-});
-app.get('/*', checkJwt, function(req, res) {
-  res.json({
-    message: 'Hello from a private endpoint! You need to be authenticated to see this.'
-  });
-});*/
 
-app.post('/api/reservas/*', checkJwt, function (req, res) {//TODO cambiar dsp
+app.use(checkJwt);
+app.post("/api/reservas/*", checkJwt, function (req, res) {
+  
   let parametros = req.url.split("/");
+  parametros = parametros.filter((el) => el != "");
   console.log(parametros);
   bodyParser(req)
-          .then(() => {
+    .then(() => {
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const request = http.request(
+        "http://localhost:" + config.puertoReservas + req.url,
+        options,
+        function (response) {
+          let body = "";
+
+          response.on("data", (chunk) => {
+            body += chunk;
+          });
+
+          response.on("end", () => {
+            res.writeHead(response.statusCode, {
+              "Content-Type": "application/json",
+            });
+            body = JSON.parse(body);
+            res.write(JSON.stringify(body));
+            res.end();
+          });
+
+          response.on("close", () => {
+            console.log("Connection closed with Reservas");
+          });
+        }
+      );
+      if (parametros[2] == "solicitar") {
+        request.write(
+          JSON.stringify({
+            userId: req.body.userId,
+          })
+        );
+      }
+      if (parametros[2] == "confirmar") {
+        request.write(
+          JSON.stringify({
+            email: req.body.email,
+            userId: req.body.userId,
+          })
+        );
+      }
+
+      request.end();
+    })
+    .catch((error) => console.error(error));
+});
+
+app.get("/api/sucursales", checkJwt, function (req, res) {
+  console.log("Recibido el GET de sucursales, se lo paso a ComponenteGestionSucursales");
+  http.get("http://localhost:" + config.puertoSucursales + req.url, (respuesta) => {
+      //ver si se puede usar URL sin hardcodearla? tal vez extraer la URL de la request
+      //posiblemente con req.connection.remoteAddress y port
+      let data = "";
+      respuesta.on("data", (chunk) => {
+        data += chunk;
+      });
+      respuesta.on("end", () => {
+        res.writeHead(respuesta.statusCode, {
+          "Content-Type": "application/json",
+        });
+        data = JSON.parse(data);
+        res.write(JSON.stringify(data));
+        res.end();
+      });
+    })
+    .on("error", (err) => {
+      console.log(err.message);
+    });
+});
+
+app.get("/api/sucursales:branchId", checkJwt, function (req, res) {
+  console.log("Recibido el GET de sucursales, se lo paso a ComponenteGestionSucursales");
+  http.get("http://localhost:" + config.puertoSucursales + req.url, (respuesta) => {
+      //ver si se usar URL sin hardcodearla? tal vez extraer la URL de la request
+      //posiblemente con req.connection.remoteAddress y port
+      let data = "";
+      respuesta.on("data", (chunk) => {
+        data += chunk;
+      });
+      respuesta.on("end", () => {
+        res.writeHead(respuesta.statusCode, {
+          "Content-Type": "application/json",
+        });
+        data = JSON.parse(data);
+        res.write(JSON.stringify(data));
+        res.end();
+      });
+    })
+    .on("error", (err) => {
+      console.log(err.message);
+    });
+});
+
+app.get("/api/reservas/:idReserva", checkJwt, function (req, res) {
+  console.log("entre aca reservas"+ req.url)
+  http
+    .get("http://localhost:" + config.puertoReservas + req.url, (respuesta) => {
+      //ver si se puede usar URL sin hardcodearla? tal vez extraer la URL de la request
+      //posiblemente con req.connection.remoteAddress y port
+      let data = "";
+      respuesta.on("data", (chunk) => {
+        data += chunk;
+      });
+      respuesta.on("end", () => {
+        res.writeHead(respuesta.statusCode, {
+          "Content-Type": "application/json",
+        });
+        data = JSON.parse(data);
+        res.write(JSON.stringify(data));
+        res.end();
+      });
+    })
+    .on("error", (err) => {
+      console.log(err.message);
+    });
+});
+
+app.get("/api/reservas", checkJwt, function (req, res) {
+  console.log("entre aca reservas"+ req.url)
+  http
+    .get("http://localhost:" + config.puertoReservas + req.url, (respuesta) => {
+      //ver si se puede usar URL sin hardcodearla? tal vez extraer la URL de la request
+      //posiblemente con req.connection.remoteAddress y port
+      let data = "";
+      respuesta.on("data", (chunk) => {
+        data += chunk;
+      });
+      respuesta.on("end", () => {
+        res.writeHead(respuesta.statusCode, {
+          "Content-Type": "application/json",
+        });
+        data = JSON.parse(data);
+        res.write(JSON.stringify(data));
+        res.end();
+      });
+    })
+    .on("error", (err) => {
+      console.log(err.message);
+    });
+});
+
+app.delete("/api/reservas/*", checkJwt, function (req, res) { //se podrian extraer query params con express
+  bodyParser(req)
+    .then(() => {
+      console.log(req.body);
+           payload = JSON.stringify({
+              
+            "userId": req.body.userId
+          })
             const options = {
-              method: 'POST',
+              method: 'DELETE',
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(JSON.stringify(req.body))
               },
 
             };
-        
+
             const request = http.request("http://localhost:"+ config.puertoReservas + req.url, options, function (response) {
-              let body = ''
+                  let body = ''
 
-              response.on('data', (chunk) => {
-                body += chunk;
-              });
+                  response.on('data', (chunk) => {
+                    body += chunk;
+                  });
 
-              response.on('end', () => {
+                  response.on('end', () => {
+                    res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
+                    body = JSON.parse(body);
+                    res.write(JSON.stringify(body));
+                    res.end();
+                  });
 
-                res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
-                body = JSON.parse(body);
-                res.write(JSON.stringify(body));
-                res.end();
-              });
-
-              response.on('close', () => {
-                console.log('Connection closed with Reservas');
-              });
-            });
-            if(parametros[3] == "solicitar"){
-              request.write(JSON.stringify({
-              
-                "userId": req.body.userId
-              }));
-            }
-            if(parametros[3] == "confirmar"){
-              request.write(JSON.stringify({
-                "email": req.body.email,
-                "userId": req.body.userId
-              }));
-            }
-            
-            request.end();
+                  response.on('close', () => {
+                    console.log('Connection closed with Reservas');
+                  });
+                });
+                
+              request.write(payload);
+              request.end();
           })
           .catch(error => console.error(error));
-  
 });
 
 app.listen(port);

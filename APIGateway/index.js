@@ -61,7 +61,6 @@ const server = http.createServer((req, res) => {
         case "POST":
          bodyParser(req)
           .then(() => {
-
             const options = {
               method: 'POST',
               headers: {
