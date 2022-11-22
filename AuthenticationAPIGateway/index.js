@@ -7,6 +7,7 @@ const { auth, requiredScopes } = require("express-oauth2-jwt-bearer");
 const http = require("http");
 const path = require("url");
 
+
 const cors = require("cors");
 app.use(
   cors({
@@ -79,9 +80,9 @@ app.post("/api/reservas/*", checkJwt, function (req, res) {
     .catch((error) => console.error(error));
 });
 
-app.get("/api/sucursales/*", function (req, res) {
-  http
-    .get("http://localhost:" + config.puertoSucursales + req.url, (respuesta) => {
+app.get("/api/sucursales/", function (req, res) {
+  console.log("Recibido el GET de sucursales, se lo paso a ComponenteGestionSucursales");
+  http.get("http://localhost:" + config.puertoSucursales + req.url, (respuesta) => {
       //ver si se puede usar URL sin hardcodearla? tal vez extraer la URL de la request
       //posiblemente con req.connection.remoteAddress y port
       let data = "";
