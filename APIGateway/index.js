@@ -3,6 +3,7 @@ const path = require('url');
 const config = require('./config.json');
 const { bodyParser } = require("./bodyParser");
 
+
 const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Request-Method', '*');
@@ -63,29 +64,30 @@ const server = http.createServer((req, res) => {
             const options = {
               method: 'POST',
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                
               },
 
             };
 
             const request = http.request("http://localhost:"+ config.puertoReservas + url, options, function (response) {
-              let body = ''
+                  let body = ''
 
-              response.on('data', (chunk) => {
-                body += chunk;
-              });
+                  response.on('data', (chunk) => {
+                    body += chunk;
+                  });
 
-              response.on('end', () => {
-                res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
-                body = JSON.parse(body);
-                res.write(JSON.stringify(body));
-                res.end();
-              });
+                  response.on('end', () => {
+                    res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
+                    body = JSON.parse(body);
+                    res.write(JSON.stringify(body));
+                    res.end();
+                  });
 
-              response.on('close', () => {
-                console.log('Connection closed with Reservas');
-              });
-            });
+                  response.on('close', () => {
+                    console.log('Connection closed with Reservas');
+                  });
+                });
             if(parametros[2] == "solicitar"){
               request.write(JSON.stringify({
               
@@ -106,17 +108,23 @@ const server = http.createServer((req, res) => {
         break;
 
         case "DELETE": // baja de reserva
-           
-          const options = {
+        bodyParser(req)
+          .then(() => {
+           payload = JSON.stringify({
+              
+            "userId": req.body.userId
+          })
+            const options = {
               method: 'DELETE',
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(req.body)
+                
               },
 
             };
-          
-          
-           const request = http.request("http://localhost:"+ config.puertoReservas + url, options,function  (response){
+
+            const request = http.request("http://localhost:"+ config.puertoReservas + url, options, function (response) {
                   let body = ''
 
                   response.on('data', (chunk) => {
@@ -134,7 +142,11 @@ const server = http.createServer((req, res) => {
                     console.log('Connection closed with Reservas');
                   });
                 });
-                request.end();
+                
+              request.write(payload);
+              request.end();
+          })
+          .catch(error => console.error(error));
       break;
     }
   }
