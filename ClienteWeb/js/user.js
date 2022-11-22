@@ -24,10 +24,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
   e.preventDefault();
   window.location.hash = "#/reservas";
   //mostrar reservas
-  
     cargarReservas();
-  
-
   });
 
   btnSolicitar.addEventListener('click',function(e){
@@ -95,8 +92,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
     .catch( error => {alert("Hubo un problema, no se pudo solicitar la reserva");console.error(error)})
   });
 
-
-
   btnConfirm.addEventListener('click',function(e){
       e.preventDefault();
       
@@ -128,26 +123,33 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
 // falta cambiar el puerto.
   btnBaja.addEventListener('click',function(e){
-
+    userId = window.sessionStorage.getItem('userId');
+    //token = window.sessionStorage.getItem('token');
     e.preventDefault();
     let idReserva = listaReservas.value;
     if(idReserva!=''){
-      const request =  fetch("http://localhost:3000/api/reservas/"+idReserva,{
-        method: "DELETE",
-        headers: {'Accept': 'application/json',       
-        }, body: JSON.stringify({
-          "userId" : userId,
+      let opcion = confirm("Seguro que desea dar de baja?");
+        if(opcion){
+       fetch("http://localhost:3000/api/reservas/"+idReserva,{
+          method: "DELETE",
+          headers: {'Accept': 'application/json',
+          'Authorization': 'Bearer ' + token,
+          }, body: JSON.stringify({
+            "userId" : userId
+          })
         })
-      })
-      .then(res => {
-        if(res.status!=200)
-            alert("Error en la baja de la reserva");
-        else{
-          alert("Reserva dada de baja con exito");
-          location.reload();
+        .then(res => {
+          if(res.status!=200)
+              alert("Error en la baja de la reserva");
+          else{
+            alert("Reserva dada de baja con exito");
+            location.reload();
+          }
         }
-      })
-      .catch((error) => console.error(error));
+        )
+        .catch((error) => console.error(error));
+        
+     }
     }
     else{
       alert("No hay ninguna reserva seleccionada");
