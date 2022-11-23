@@ -146,8 +146,8 @@ function altaReserva(req, res, idReserva) {
               });
 
               response.on('end', () => {
-                res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
-                res.write(JSON.stringify(body));
+                //res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
+                //res.write(JSON.stringify(body));
                 res.end();
               });
 

@@ -88,5 +88,5 @@ const server = http.createServer((req, res) => {
 });
 
 
-server.listen(8080);
-console.log('Gestion notificaciones', 8080);
+server.listen(7000);
+console.log('Gestion notificaciones', 7000);
