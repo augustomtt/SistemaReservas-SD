@@ -17,13 +17,53 @@ document.addEventListener('DOMContentLoaded', function (e) {
   var userId;
   var token;
   var header;
-
+  window.addEventListener('hashchange',()=>{
+    this.location.reload();
+    /*
+    if(window.location.hash == "#/invitado"){
+      alert("Invitado")
+      port = 3000
+      userId = 0
+      header = {
+        'Accept': 'application/json',
+      };
+      email.value ="";
+      email.removeAttribute("readonly");
+    }
+    if(window.location.hash == "#/logeado"){
+      port = 3001
+      userId = window.sessionStorage.getItem('userId');
+      token = window.sessionStorage.getItem('token');
+      email.value = window.sessionStorage.getItem('email');
+      email.setAttribute("readonly",""); // para que no se pueda cambiar
+      console.log("token recuperado " + token);
+      header = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      };
+    }
+    if(window.location.hash == "#/reservas"){
+      port = 3001
+      userId = window.sessionStorage.getItem('userId');
+      token = window.sessionStorage.getItem('token');
+      email.value = window.sessionStorage.getItem('email');
+      email.setAttribute("readonly",""); // para que no se pueda cambiar
+      console.log("token recuperado " + token);
+      header = {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      };
+      cargarReservas();
+    }*/
+});
   if (window.location.hash == '#/invitado') { 
     port = 3000
     userId = 0
     header = {
       'Accept': 'application/json',
     };
+    email.value ="";
+    email.removeAttribute("readonly")
   } else {
     port = 3001
     userId = window.sessionStorage.getItem('userId');
