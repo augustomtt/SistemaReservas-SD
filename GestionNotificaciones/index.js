@@ -14,7 +14,7 @@ const server = http.createServer((req, res) => {
   const { url, method } = req;
 
   console.log(`URL: ${url} - METHOD: ${method}`);
-
+  
 
   if (url.startsWith("/api/notificacion")) {//DEFINICION DE INTERFAZ PENDIENTE REVISAR DOC LUEGO (ya hice la sugerencia)
     if (method == "POST") {
@@ -32,7 +32,6 @@ const server = http.createServer((req, res) => {
 
           var request = https.request(options, (response) => {
             console.log('statusCode:', res.statusCode);
-            console.log('headers:', res.headers);
 
             let bodyRespuesta = ''
 
