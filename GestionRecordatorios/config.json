@@ -1,5 +1,4 @@
 {
-
-    "puertoNotificacion":8080,
+    "puertoNotificacion":7000,
     "puertoReserva":8000
 }
