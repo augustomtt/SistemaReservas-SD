@@ -71,12 +71,12 @@ const shouldSendRecordatory = (date1, date2 = new Date()) => {
 
 const wasSentToAnotherAccount = (reserva) => {
   return sentRecordatories.some(
-    (r) => r.id === reserva.id && r.email !== reserva.email
+    (r) => r.idReserva === reserva.idReserva && r.email !== reserva.email
   );
 };
 
 const wasNotSent = (reserva) => {
-  return !sentRecordatories.some((r) => r.id === reserva.id);
+  return !sentRecordatories.some((r) => r.idReserva === reserva.idReserva);
 };
 console.log("Recordatorios funcionando");
 setInterval(main, 60 * 60000); //una hora

@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       .then(data => {console.log(data)} )
 
       let option  = document.createElement('option')
-      option.value = element.id;
+      option.value = element.idReserva;
       option.text = element.name;
     sucursal.appendChild(option)
       });
