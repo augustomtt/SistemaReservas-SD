@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           listaDia.append(option);
         data.forEach(element => {
           let option  = document.createElement('option')
-          option.value = element.id;
+          option.value = element.idReserva; //INTERFACES 
           let fecha = (element.dateTime).split("T")
           option.text = fecha[0];
           let options = listaDia.querySelectorAll('option');
@@ -214,12 +214,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
       option.value = 0;
       option.text = "Seleccione una hora";
         data.forEach(element => {   let option  = document.createElement('option')
-        option.value = element.id;
+        option.value = element.idReserva; //INTERFACES
         let dia =  new Date(element.dateTime);
         let hora = dia.getHours();
         let minutos = dia.getMinutes();
         if(minutos<10)
-        minutos+="0"
+          minutos="0"+minutos
         option.text = hora+ ":" + minutos;
         console.log(dia.toISOString())
         listaHora.appendChild(option);})
@@ -246,13 +246,13 @@ document.addEventListener('DOMContentLoaded', function (e) {
   .then(data =>{
     data.forEach(element => {
       let option  = document.createElement('option');
-      option.value = element.id;
+      option.value = element.idReserva; //INTERFACES
       let fecha = (element.dateTime).split("T");
       let dia =  new Date(element.dateTime);
       let hora = dia.getHours();
       let minutos = dia.getMinutes();
       if(minutos<10)
-      minutos+="0";
+        minutos="0"+minutos;
       option.text = `${fecha[0]} ---- ${hora}:${minutos}`;
       listaReservas.append(option)
     })
