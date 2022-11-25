@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       listaReservas.append(option)
     })
   })
-  .catch(error =>{alert("Error en la carga de reservas");console.error(error)});
+  .catch(error =>{alert("No se encuentra ninguna reserva");console.error(error)});
   }
  
   function cargarSucursales(mapId){

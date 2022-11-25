@@ -33,7 +33,7 @@ const server = http.createServer((req,res)=>{
     if(url.startsWith("/api/sucursales")){
         let parametros = url.split("/");
         parametros = parametros.filter(el => el != '')   //filtro los vacios
-        console.log(parametros)
+        //console.log(parametros)
             if(parametros.length == 2){ // todas las sucursales
                 getSucursales(res)
             }
