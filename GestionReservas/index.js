@@ -53,7 +53,7 @@ function getTurnos(res, queryParams) {
 }
 function getReserva(res, idReserva) {
 
-  let reserva = reservas.find(r => r.id == idReserva);
+  let reserva = reservas.find(r => r.idReserva == idReserva);
   let respuesta = {
     msg: ""
   }
@@ -77,7 +77,7 @@ function bajaReserva(req,res, idReserva) {
   }
   bodyParser(req)
   .then(()=>{
-    let reserva = reservas.find(r => r.id == idReserva);
+    let reserva = reservas.find(r => r.idReserva == idReserva);
     if (reserva != undefined){
       if(reserva.userId == req.body.userId && reserva.status != 0){
         reserva.email = null;
@@ -115,7 +115,7 @@ function altaReserva(req, res, idReserva) {
     .then(() => {
 
       reservas.forEach(element => {
-        if (element.id == idReserva && element.userId==req.body.userId && element.status==1) {
+        if (element.idReserva == idReserva && element.userId==req.body.userId && element.status==1) {
           element.email = req.body.email;
           element.userId = req.body.userId;
           element.status = 2;
@@ -181,7 +181,7 @@ function verificaTurno(req,res,idReserva) { // cambio status de 0 a 1, y pongo u
     };
     bodyParser(req)
     .then(()=>{
-      let reserva = reservas.find(r => r.id == idReserva);
+      let reserva = reservas.find(r => r.idReserva == idReserva);
   
     if (reserva != undefined) {
       if (reserva.status == 0) {
@@ -198,7 +198,7 @@ function verificaTurno(req,res,idReserva) { // cambio status de 0 a 1, y pongo u
        
         let timeout = setTimeout(()=>{
           let resultado = 0;
-            let reserva = reservas.find(r => r.id == idReserva);
+            let reserva = reservas.find(r => r.idReserva == idReserva);
             if(reserva.status!=2){
               reserva.status = 0;
               reserva.userId = -1;
