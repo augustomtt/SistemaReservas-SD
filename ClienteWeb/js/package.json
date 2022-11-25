@@ -1,15 +1,15 @@
 {
   "name": "clienteweb",
   "version": "1.0.0",
-  "description": "",
-  "main": "prueba.js",
+  "description": "cliente web de la app",
+  "main": "user.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "grupo2",
   "license": "ISC",
   "dependencies": {
-    "node-fetch": "^3.2.10"
-  },
-  "type": "module"
+    "fs": "^0.0.1-security",
+    "require": "^2.4.20"
+  }
 }
