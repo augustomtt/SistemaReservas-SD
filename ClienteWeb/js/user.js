@@ -5,56 +5,18 @@ document.addEventListener('DOMContentLoaded', function (e) {
   var btnBaja = document.getElementById("btn-baja");
   var misReservas = document.getElementById('mis-reservas');
   var mapa = document.getElementById("map");
-  //var mapId = "55f6ea4a-159d-4905-96ef-ff1d3ce1798d";
   var sucursal = document.getElementById("sucursales");
   var listaDia = document.getElementById("lista_dias");
   var listaHora = document.getElementById("lista_horas");
   var listaReservas = document.getElementById("lista_reservas");
   var email = document.getElementById("email");
   var datos = document.getElementById("datos");
-  var timer;
   var port;
   var userId;
   var token;
   var header;
   window.addEventListener('hashchange',()=>{
     this.location.reload();
-    /*
-    if(window.location.hash == "#/invitado"){
-      alert("Invitado")
-      port = 3000
-      userId = 0
-      header = {
-        'Accept': 'application/json',
-      };
-      email.value ="";
-      email.removeAttribute("readonly");
-    }
-    if(window.location.hash == "#/logeado"){
-      port = 3001
-      userId = window.sessionStorage.getItem('userId');
-      token = window.sessionStorage.getItem('token');
-      email.value = window.sessionStorage.getItem('email');
-      email.setAttribute("readonly",""); // para que no se pueda cambiar
-      console.log("token recuperado " + token);
-      header = {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + token,
-      };
-    }
-    if(window.location.hash == "#/reservas"){
-      port = 3001
-      userId = window.sessionStorage.getItem('userId');
-      token = window.sessionStorage.getItem('token');
-      email.value = window.sessionStorage.getItem('email');
-      email.setAttribute("readonly",""); // para que no se pueda cambiar
-      console.log("token recuperado " + token);
-      header = {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + token,
-      };
-      cargarReservas();
-    }*/
 });
   if (window.location.hash == '#/invitado') { 
     port = 3000
@@ -105,27 +67,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
         datos.style.display = "block";
         btnConfirm.style.display = "block";
         alert("Tiene dos minutos para completar sus datos y confirmar el turno");
-        /*
-        timer  = setTimeout(function(){
-
-          alert("Se termino el tiempo para confirmar la reserva");
-         
-          //fetch para dar de baja la reserva
-          
-          fetch("http://localhost:3000/api/reservas/"+listaHora.value,{
-            method: "DELETE",
-            headers: {'Accept': 'application/json',       
-            }, body: JSON.stringify({
-              "userId" : userId,
-            })
-          })
-          .then(res => {
-            if(res.status!=200)
-                alert("Error en la baja de la reserva");
-          })
-          .catch((error) => console.error(error));
-          location.reload();
-        },120000);*/
       }
       else
         alert("Hubo un problema, no se pudo solicitar la reserva")
@@ -150,7 +91,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
     ).then(res =>{
       if(res.status == 200){
         alert("Turno confirmado correctamente");
-        //clearTimeout(timer); // elimino el timeout
         location.reload();
       }
       else{
@@ -283,7 +223,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
         option.text = hora+ ":" + minutos;
         console.log(dia.toISOString())
         listaHora.appendChild(option);})
-      //.toLocaleDateString();   
       }
     )
   .catch(error => console.error(error));
@@ -360,7 +299,10 @@ document.addEventListener('DOMContentLoaded', function (e) {
 
   }
   //Prueba de mostrar el mapa de cartes.io
-   
+     if(window.location.hash == "#/invitado" || window.location.hash == "#/logeado"){
+    
+      // chequear si esta cargado el mapa
+        
       var url = 'https://cartes.io/api/maps'
        fetch(url,{
           method: "POST",
@@ -376,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
       ).then(res =>res.json())
       .then(data => {mapa.src = "https://app.cartes.io/maps/"+data.uuid+"/embed?type=map&lat=-37.998768161736486&lng=-57.52020835876465&zoom=12"; cargarSucursales(data.uuid)} )
       .catch(error => console.error(error));
-
+    }
 
       if(window.location.hash == "#/reservas"){
          cargarReservas();
