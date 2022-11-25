@@ -1,5 +1,6 @@
 const http = require('http');
 const config = require('./config.json');
+const sentRecordatories = []; 
 
 function main () {
   http.get("http://localhost:"+config.puertoReserva+"/api/reservas", (res) => {
@@ -14,39 +15,45 @@ function main () {
       const reservas = JSON.parse(body);
       reservas.forEach((reserva) => {
         const time = new Date(reserva.dateTime);
-        if (isSameDate(time) && reserva.status == 2){
 
-          console.log('Enviando recordatorio', reserva);
-          let postData = {
-            "destinatario": reserva.email,
-            "asunto": "Recordatorio de reserva desde api",
-            "cuerpo": "Recordatorio de reserva para el día de hoy"
-          }
+        if (shouldSendRecordatory(time) && reserva.status == 2){
 
-          const options = {
-            hostname: 'localhost',
-            port: config.puertoNotificacion,
-            path: '/api/notificacion',
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
+          if (wasNotSent(reserva) || wasSentToAnotherAccount(reserva)) {
+            console.log('Enviando recordatorio', reserva);
+
+            sentRecordatories.push(reserva);
+
+            let postData = {
+              "destinatario": reserva.email,
+              "asunto": "Recordatorio de su reserva",
+              "cuerpo": "Le recordamos que usted tiene una reservación para el día de hoy"
             }
-          }
 
-          const req = http.request(options, (res) => {
-            console.log(`statusCode: ${res.statusCode}`)
+            const options = {
+              hostname: 'localhost',
+              port: config.puertoNotificacion,
+              path: '/api/notificacion',
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
 
-            res.on('data', (d) => {
-              process.stdout.write(d)
+            const req = http.request(options, (res) => {
+              console.log(`statusCode: ${res.statusCode}`)
+
+              res.on('data', (d) => {
+                process.stdout.write(d)
+              })
             })
-          })
 
-          req.on('error', (error) => {
-            console.error(error)
-          })
+            req.on('error', (error) => {
+              console.error(error)
+            })
 
-          req.write(JSON.stringify(postData))
-          req.end()
+            req.write(JSON.stringify(postData))
+            req.end()
+          }
 
         } else {
           console.log('No se envia recordatorio');
@@ -56,11 +63,20 @@ function main () {
   })
 }
 
-const isSameDate = (date1, date2 = new Date()) => {
-  console.log(date2);
-  return date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate();
+const shouldSendRecordatory = (date1, date2 = new Date()) => {
+  console.log(f1);
+  console.log(f2);
+  const dif = date1 - date2;
+  const horas = Math.floor(dif / (1000 * 60 * 60));
+  return horas < 24 && horas > 0;
+}
+
+const wasSentToAnotherAccount = (reserva) => {
+  return sentRecordatories.some((r) => r.id === reserva.id && r.email !== reserva.email);
+}
+
+const wasNotSent = (reserva) => {
+  return !sentRecordatories.some((r) => r.id === reserva.id);
 }
 
 setInterval(main, 60000);
