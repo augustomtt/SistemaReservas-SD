@@ -124,7 +124,6 @@ function altaReserva(req, res, idReserva) {
         }
       });
       if (resultado) {
-
             res.writeHead(200, { 'Content-Type': 'application/json' });
             respuesta.msg = "Reserva confirmada correctamente";
             fs.writeFile('reservas.json', JSON.stringify(reservas), 'utf8', (err) => {
@@ -158,7 +157,7 @@ function altaReserva(req, res, idReserva) {
             request.write(JSON.stringify({
               "destinatario": req.body.email,
               "asunto": "Notificacion Reserva",
-              "cuerpo":  `Tu reserva del dia ${new Date(date).toISOString} fue confirmada con exito`
+              "cuerpo":  `Tu reserva del dia ${date.substring(0,10)} fue confirmada con exito`
             }));
             request.end();
     
